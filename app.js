@@ -23,8 +23,8 @@
     get(k, d) { try { const v = localStorage.getItem('khobau:' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
     set(k, v) { try { localStorage.setItem('khobau:' + k, JSON.stringify(v)); } catch (e) { /* bỏ qua */ } }
   };
-  const S = { stickers: store.get('stickers', {}), stars: store.get('stars', 0), best: store.get('best', {}), sound: store.get('sound', true), played: store.get('played', 0) };
-  const save = () => { ['stickers', 'stars', 'best', 'sound', 'played'].forEach((k) => store.set(k, S[k])); updateTop(); };
+  const S = { stickers: store.get('stickers', {}), stars: store.get('stars', 0), best: store.get('best', {}), sound: store.get('sound', true), played: store.get('played', 0), practice: store.get('practice', {}) };
+  const save = () => { ['stickers', 'stars', 'best', 'sound', 'played', 'practice'].forEach((k) => store.set(k, S[k])); updateTop(); };
   const nStick = (t) => ITEMS.filter((i) => (!t || i.type === t) && S.stickers[i.id]).length;
 
   /* ── biểu tượng ── */
@@ -136,7 +136,7 @@
           <div class="row"><a class="btn primary" href="#thanh-ngu">Mở kho báu</a><a class="btn" href="#tro-choi">Vào chơi ngay</a></div></div>
         <figure class="hero-trau"><div class="say-bubble">Chào các bạn! Mình là Trâu Con. Mình cùng khám phá lời ông bà nhé!</div><img src="${IMG('wave')}" alt="Trâu Con vẫy tay chào"></figure>
       </section>
-      <section class="section"><div class="section-head"><h2>Ba kho báu</h2><p>Mỗi kho 20 câu. Đọc xong một câu, bấm "Mình hiểu rồi!" để cất vào Sổ sưu tầm.</p></div>
+      <section class="section"><div class="section-head"><h2>Ba kho báu</h2><p>Mỗi kho 20 câu. Đọc xong một câu, làm 4 bài luyện tập nhỏ để cất câu vào Sổ sưu tầm.</p></div>
         <div class="chests">${chest('thanh-ngu', 'tn01')}${chest('tuc-ngu', 'tg04')}${chest('ca-dao', 'cd15')}</div></section>
       <section class="section"><div class="section-head"><h2>Ba anh em khác nhau thế nào?</h2>${enBtn('cmp-en')}</div>
         <div class="compare">
@@ -195,9 +195,99 @@
         </div>
       </div>`;
   }
-  const collectInner = (it, got) => got
-    ? `<img src="${IMG('thumbs-up')}" alt=""><p class="txt">Câu này đã nằm trong Sổ sưu tầm của các bạn rồi! Mình thử chơi một trò để nhớ lâu hơn nhé.</p><a class="btn small" href="#so-suu-tam">Xem sổ</a>`
-    : `<img src="${IMG('peeking')}" alt=""><p class="txt">Các bạn đọc kỹ nghĩa rồi bấm nút này để cất câu vào Sổ sưu tầm nhé!</p><button class="btn primary small" data-act="collect" data-id="${it.id}">Mình hiểu rồi!</button>`;
+  const collectInner = (it, got) => {
+    const best = S.practice[it.id] || 0;
+    return `<img src="${IMG(got ? 'thumbs-up' : 'peeking')}" alt=""><div class="txt"><b>Luyện tập 4 bài nhỏ</b>
+      <span class="sub">Điền từ · Xếp câu · Hiểu nghĩa · Chọn tranh</span>
+      <span class="sub">${got ? 'Câu này đã có trong Sổ sưu tầm. Luyện lại để nhớ lâu hơn nhé!' : 'Đọc xong rồi? Các bạn làm 4 bài nhỏ để cất câu này vào Sổ sưu tầm nhé!'}</span>
+      ${best ? `<span class="mini-stars" aria-label="Kết quả tốt nhất ${best} sao">${[1, 2, 3].map((k) => I.star(k <= best)).join('')}</span>` : ''}</div>
+      <button class="btn primary" data-act="p-open" data-id="${it.id}">${got ? 'Luyện lại' : 'Bắt đầu luyện tập'}</button>`;
+  };
+
+  /* ── LUYỆN TẬP sau mỗi câu: Điền từ · Xếp câu · Hiểu nghĩa · Chọn tranh ── */
+  const P_STEPS = [
+    { key: 'dien', name: 'Điền từ', ask: 'Chọn tiếng còn thiếu trong câu.', en: 'Choose the missing word.' },
+    { key: 'xep', name: 'Xếp câu', ask: 'Bấm các tiếng theo đúng thứ tự để xếp lại câu.', en: 'Tap the words in the right order to rebuild the saying.' },
+    { key: 'nghia', name: 'Hiểu nghĩa', ask: 'Câu này có nghĩa là gì? Chọn cách giải thích đúng.', en: 'What does this saying mean? Choose the correct explanation.' },
+    { key: 'tranh', name: 'Chọn tranh', ask: 'Tranh nào đúng với câu này?', en: 'Which picture matches this saying?' }
+  ];
+  const lastSentence = (s) => { const p = s.split(/(?<=[.!?])\s+/); return p[p.length - 1]; };
+  const shortMeaning = (it) => (it.lines ? lastSentence(it.nghia) : it.nghia);
+  function distract(it, n) {
+    const ok = ITEMS.filter((o) => o.id !== it.id && !o.tags.some((t) => it.tags.includes(t)));
+    return shuffle(ok.filter((o) => o.type === it.type)).concat(shuffle(ok.filter((o) => o.type !== it.type))).slice(0, n);
+  }
+  const orderSource = (it) => (it.lines ? it.lines[0] : it.text.split(' ').length <= 9 ? it.text : it.halves[0]);
+  let P = null;
+  function newPractice(id) {
+    const it = byId[id], ans = bare(tokAt(it, it.blank.at)), target = orderSource(it).split(' ').map(bare);
+    let tiles; do { tiles = shuffle(target.map((t) => ({ t }))); } while (tiles.length > 1 && tiles.every((x, k) => x.t === target[k]));
+    P = {
+      id, step: 0, score: 0, first: true, solved: false, wrong: new Set(), done: false, stars: 0,
+      dien: { ans, opts: shuffle([ans, ...it.blank.opts]) },
+      xep: { target, tiles, ans: [], part: it.lines ? 'Dòng đầu của bài ca dao' : orderSource(it) !== it.text ? 'Nửa đầu của câu' : '' },
+      nghia: shuffle([it, ...distract(it, 2)]).map((o) => ({ id: o.id, t: shortMeaning(o) })),
+      tranh: shuffle([it.id, ...distract(it, 2).map((o) => o.id)]),
+      say: 'Mình cùng luyện tập nhé! Các bạn đọc thật kỹ rồi chọn nha.', mood: 'reading'
+    };
+  }
+  const sayingHTML = (it) => (it.lines ? it.lines.map((l) => `<span class="ln">${esc(l)}</span>`).join('') : esc(it.text));
+  function practiceHTML() {
+    const it = byId[P.id], st = P_STEPS[P.step], list = ofType(it.type), next = list[list.indexOf(it) + 1];
+    const steps = `<ol class="steps">${P_STEPS.map((s, k) => `<li class="${P.done || k < P.step ? 'done' : k === P.step ? 'on' : ''}"><b>${k + 1}</b> ${s.name}</li>`).join('')}</ol>`;
+    let body;
+    if (P.done) {
+      body = `<div class="end"><img src="${IMG(P.stars === 3 ? 'cheer' : 'thumbs-up')}" alt="Trâu Con"><h2>${P.stars === 3 ? 'Xuất sắc! Các bạn đúng hết ngay lần đầu!' : P.stars === 2 ? 'Giỏi lắm! Các bạn hoàn thành rồi!' : 'Hoàn thành rồi! Luyện lại để được 3 sao nhé!'}</h2>
+        <div class="stars">${[1, 2, 3].map((k) => I.star(k <= P.stars)).join('')}</div>
+        <p>Câu <b>${esc(firstLine(it))}</b> đã nằm trong Sổ sưu tầm của các bạn.</p>
+        <div class="row"><button class="btn" data-act="p-again">Luyện lại</button>${next ? `<button class="btn primary" data-act="p-go" data-id="${next.id}">Sang câu sau ›</button>` : `<button class="btn primary" data-act="p-go" data-id="">Về kho ${esc(TYPES[it.type].name)}</button>`}<button class="btn" data-act="p-close">Đóng</button></div></div>`;
+    } else {
+      const head = `<div class="px-ask"><p>${st.ask}</p>${enBtn('px-en')}</div><p class="en-text" id="px-en" hidden>${st.en}</p>`;
+      let q = '';
+      if (st.key === 'dien') {
+        const lines = (it.lines || [it.text]).map((l, li) => `<span class="ln">${l.split(' ').map((w, wi) => li === it.blank.at[0] && wi === it.blank.at[1] ? `<span class="blank${P.solved ? ' filled' : ''}">${P.solved ? esc(w) : '&nbsp;'}</span>` : esc(w)).join(' ')}</span>`).join('');
+        q = `<p class="q-text${it.lines ? ' poem-q' : ''}">${lines}</p><div class="opts">${P.dien.opts.map((o) => `<button class="opt${P.wrong.has(o) ? ' wrong' : ''}${P.solved && o === P.dien.ans ? ' right' : ''}" data-act="p-ans" data-v="${esc(o)}" ${P.solved || P.wrong.has(o) ? 'disabled' : ''}>${esc(o)}</button>`).join('')}</div>`;
+      } else if (st.key === 'xep') {
+        const x = P.xep;
+        q = `${x.part ? `<p class="px-note">${x.part}</p>` : ''}<div class="tiles answer${P.solved ? ' ok' : ''}" id="px-ansrow">${x.ans.map((k, pos) => `<button class="tile in" data-act="p-untile" data-pos="${pos}" ${P.solved ? 'disabled' : ''}>${esc(x.tiles[k].t)}</button>`).join('') || '<span class="px-hint">Bấm các tiếng bên dưới…</span>'}</div>
+          ${P.solved ? '' : `<div class="tiles">${x.tiles.map((t, k) => `<button class="tile${x.ans.includes(k) ? ' used' : ''}" data-act="p-tile" data-k="${k}">${esc(t.t)}</button>`).join('')}</div>
+          <div class="next-row"><button class="btn small" data-act="p-hint">Gợi ý một tiếng</button></div>`}`;
+      } else if (st.key === 'nghia') {
+        q = `<p class="q-text${it.lines ? ' poem-q' : ''}">${sayingHTML(it)}</p><div class="opts col">${P.nghia.map((o) => `<button class="opt long${P.wrong.has(o.id) ? ' wrong' : ''}${P.solved && o.id === it.id ? ' right' : ''}" data-act="p-ans" data-v="${o.id}" ${P.solved || P.wrong.has(o.id) ? 'disabled' : ''}>${esc(o.t)}</button>`).join('')}</div>`;
+      } else {
+        q = `<p class="q-text${it.lines ? ' poem-q' : ''}">${sayingHTML(it)}</p><div class="pics">${P.tranh.map((id, k) => `<button class="pic-opt${P.wrong.has(id) ? ' wrong' : ''}${P.solved && id === it.id ? ' right' : ''}" data-act="p-ans" data-v="${id}" aria-label="Tranh ${k + 1}" ${P.solved || P.wrong.has(id) ? 'disabled' : ''}>${ART.scene(id)}</button>`).join('')}</div>`;
+      }
+      body = `${head}<div class="px-q">${q}</div>
+        ${P.solved ? `<div class="next-row"><button class="btn primary" data-act="p-next">${P.step < 3 ? 'Bài tiếp ›' : 'Xem kết quả'}</button></div>` : ''}
+        <div class="trau-say"><img src="${IMG(P.mood)}" alt="Trâu Con"><p aria-live="polite">${esc(P.say)}</p></div>`;
+    }
+    return `<div class="px-box" role="dialog" aria-modal="true" aria-labelledby="px-title"><div class="px-head"><h2 id="px-title">Luyện tập: ${esc(firstLine(it))}</h2><button class="px-close" data-act="p-close" aria-label="Đóng">×</button></div>${steps}${body}</div>`;
+  }
+  function drawPx(shakeSel) {
+    const px = document.getElementById('px'); px.innerHTML = practiceHTML();
+    if (shakeSel) { const el = px.querySelector(shakeSel); if (el) { void el.offsetWidth; el.classList.add('shake'); } }
+  }
+  function openPx() {
+    let px = document.getElementById('px');
+    if (!px) { px = document.createElement('div'); px.id = 'px'; px.className = 'px'; document.body.appendChild(px); }
+    px.hidden = false; document.documentElement.classList.add('px-open'); drawPx();
+    const c = px.querySelector('.px-close'); if (c) c.focus({ preventScroll: true });
+  }
+  function closePx() {
+    const px = document.getElementById('px'); if (px) { px.hidden = true; px.innerHTML = ''; }
+    document.documentElement.classList.remove('px-open'); P = null;
+    if (location.hash.startsWith('#cau-')) { const box = document.getElementById('collect'); const it = byId[location.hash.slice(5)]; if (box && it) box.innerHTML = collectInner(it, !!S.stickers[it.id]); }
+  }
+  function pSolve(ok, shakeSel) {
+    if (ok) { P.solved = true; if (P.first) P.score++; P.say = rand(SAY.ok); P.mood = rand(['cheer', 'thumbs-up']); sfx.ok(); drawPx(); }
+    else { P.first = false; P.say = rand(SAY.bad); P.mood = 'thinking'; sfx.bad(); drawPx(shakeSel); }
+  }
+  function pFinish() {
+    P.done = true; P.stars = P.score === 4 ? 3 : P.score === 3 ? 2 : 1;
+    if (!S.stickers[P.id]) S.stickers[P.id] = Date.now();
+    S.practice[P.id] = Math.max(S.practice[P.id] || 0, P.stars); S.stars += P.stars; save();
+    sfx.win(); confetti(P.stars * 15); drawPx();
+  }
   function rhymePairs(it) {
     const cols = ['#F6D36B', '#B9D7A6', '#BFDCEB', '#F2C2D0'], out = {}; let c = 0;
     for (let i = 0; i < it.lines.length; i++) {
@@ -212,7 +302,7 @@
   function viewBook() {
     const total = nStick();
     const badge = (on, title, sub, c) => `<div class="badge${on ? '' : ' off'}"><svg viewBox="0 0 46 46"><circle cx="23" cy="23" r="21" fill="${c}"/><path d="M23 9l4 8.4 9.2 1.1-6.8 6.3 1.8 9L23 29.4l-8.2 4.4 1.8-9-6.8-6.3 9.2-1.1z" fill="#F6D36B"/></svg><div><b>${title}</b><span>${sub}</span></div></div>`;
-    return `<section class="book-head"><img src="${IMG(total >= 30 ? 'cheer' : 'reading')}" alt=""><div><h1>Sổ sưu tầm</h1><p>${total === 0 ? 'Sổ còn trống. Các bạn mở một kho báu, đọc một câu rồi bấm "Mình hiểu rồi!" nhé.' : total === 60 ? 'Các bạn đã sưu tầm đủ 60 viên ngọc! Mình tự hào về các bạn lắm!' : `Các bạn đã có ${total} viên ngọc. Còn ${60 - total} viên nữa thôi!`}</p>
+    return `<section class="book-head"><img src="${IMG(total >= 30 ? 'cheer' : 'reading')}" alt=""><div><h1>Sổ sưu tầm</h1><p>${total === 0 ? 'Sổ còn trống. Các bạn mở một kho báu, đọc một câu rồi làm 4 bài luyện tập nhỏ nhé.' : total === 60 ? 'Các bạn đã sưu tầm đủ 60 viên ngọc! Mình tự hào về các bạn lắm!' : `Các bạn đã có ${total} viên ngọc. Còn ${60 - total} viên nữa thôi!`}</p>
         <div class="stats"><span class="stat"><b>${total}</b>/60 câu</span><span class="stat"><b>${S.stars}</b> ngôi sao</span><span class="stat"><b>${S.played}</b> lượt chơi</span></div></div></section>
       <section class="section"><div class="section-head"><h2>Huy hiệu</h2></div><div class="badges">
         ${badge(nStick('thanh-ngu') === 20, 'Nhà thám hiểm Thành ngữ', 'Sưu tầm đủ 20 thành ngữ', '#3E7A47')}
@@ -261,7 +351,7 @@
         const q = g.q[g.i], it = q.it;
         return `<div class="q-grid"><div class="q-art">${ART.scene(it.id)}</div><div><span class="kind" style="${cvars(it.type)}">${TYPES[it.type].name}${it.lines ? ' · dòng đầu' : ''}</span><p style="margin-top:10px"><b>Gợi ý:</b> ${it.lines ? `Dòng sau của bài là: <i>${esc(it.lines[1])}</i>` : esc(it.den || it.nghia)}</p></div></div>
           <div class="tiles answer${g.solved ? ' ok' : ''}" id="ansrow" aria-label="Câu của các bạn">${q.ans.map((k, pos) => `<button class="tile in" data-act="untile" data-pos="${pos}" ${g.solved ? 'disabled' : ''}>${esc(q.tiles[k].t)}</button>`).join('') || '<span style="color:var(--muted);font-weight:700;padding:10px">Bấm các tiếng bên dưới…</span>'}</div>
-          <div class="tiles">${q.tiles.map((x, k) => `<button class="tile${q.ans.includes(k) ? ' used' : ''}" data-act="tile" data-k="${k}" ${g.solved ? 'disabled' : ''}>${esc(x.t)}</button>`).join('')}</div>
+          ${g.solved ? '' : `<div class="tiles">${q.tiles.map((x, k) => `<button class="tile${q.ans.includes(k) ? ' used' : ''}" data-act="tile" data-k="${k}">${esc(x.t)}</button>`).join('')}</div>`}
           ${g.solved ? `<div class="reveal"><b>${esc(firstLine(it))}</b><br>${esc(it.nghia)}</div>${nextRow(g)}` : `<div class="next-row"><button class="btn small" data-act="hint">Gợi ý một tiếng</button></div>`}`;
       }
     },
@@ -394,10 +484,40 @@
     'all-en'(el) { const on = el.getAttribute('aria-pressed') !== 'true'; el.setAttribute('aria-pressed', String(on)); document.getElementById('chips').classList.toggle('show-en', on); el.textContent = on ? 'Ẩn nghĩa từng tiếng' : 'Hiện nghĩa từng tiếng'; },
     count(el) { const on = el.getAttribute('aria-pressed') !== 'true'; el.setAttribute('aria-pressed', String(on)); document.getElementById('detail-body').classList.toggle('counting', on); el.innerHTML = on ? 'Ẩn đếm tiếng' : 'Đếm tiếng &amp; tìm vần'; },
     speak(el) { speak(byId[el.dataset.id]); },
-    collect(el) {
-      const it = byId[el.dataset.id]; S.stickers[it.id] = Date.now(); save(); sfx.win(); confetti(30);
-      const box = document.getElementById('collect'); box.innerHTML = collectInner(it, true); box.classList.add('pop');
-      toast(`Đã cất "${firstLine(it)}" vào Sổ sưu tầm!`);
+    'p-open'(el) { newPractice(el.dataset.id); openPx(); },
+    'p-close'() { closePx(); },
+    'p-again'() { newPractice(P.id); drawPx(); },
+    'p-go'(el) { const t = byId[P.id].type; closePx(); location.hash = el.dataset.id ? 'cau-' + el.dataset.id : t; },
+    'p-ans'(el) {
+      if (!P || P.solved) return; const v = el.dataset.v, key = P_STEPS[P.step].key;
+      const ok = key === 'dien' ? v === P.dien.ans : v === P.id;
+      if (!ok) P.wrong.add(v);
+      pSolve(ok, `[data-v="${CSS.escape(v)}"]`);
+    },
+    'p-tile'(el) {
+      const x = P.xep, k = +el.dataset.k; if (x.ans.includes(k)) return; x.ans.push(k); sfx.pop();
+      if (x.ans.length === x.target.length) {
+        const ok = x.ans.every((kk, p) => x.tiles[kk].t === x.target[p]);
+        if (!ok) { pSolve(false, '#px-ansrow'); P.say = 'Thứ tự chưa đúng. Các bạn bấm vào tiếng ở hàng trên để gỡ ra rồi xếp lại nhé!'; return drawPx('#px-ansrow'); }
+        return pSolve(true);
+      }
+      drawPx();
+    },
+    'p-untile'(el) { P.xep.ans.splice(+el.dataset.pos, 1); drawPx(); },
+    'p-hint'() {
+      const x = P.xep; P.first = false;
+      let p = 0; while (p < x.ans.length && x.tiles[x.ans[p]].t === x.target[p]) p++;
+      x.ans.splice(p);
+      const k = x.tiles.findIndex((t, kk) => t.t === x.target[p] && !x.ans.includes(kk)); if (k >= 0) x.ans.push(k);
+      P.say = 'Mình gợi ý một tiếng rồi đó. Các bạn xếp tiếp nhé!'; P.mood = 'thumbs-up';
+      if (x.ans.length === x.target.length) return pSolve(true);
+      drawPx();
+    },
+    'p-next'() {
+      if (P.step >= 3) return pFinish();
+      P.step++; P.solved = false; P.first = true; P.wrong = new Set();
+      P.say = rand(['Bài tiếp theo nè!', 'Các bạn đọc thật kỹ nhé!', 'Mình cùng làm bài này nhé!']); P.mood = rand(['reading', 'listening', 'wave']);
+      drawPx(); const b = document.querySelector('.px-box'); if (b) b.scrollTop = 0;
     },
     'play-kho'(el, e) { e.preventDefault(); G = null; newGame('dien-tu', el.dataset.kho); location.hash = 'choi-dien-tu'; },
     kho(el) { newGame(G.id, el.dataset.kho); render(); },
@@ -460,7 +580,7 @@
       }
     },
     'reset-ask'() { document.getElementById('reset-box').innerHTML = `<span style="font-weight:800">Xóa hết câu đã sưu tầm và ngôi sao trên máy này?</span><button class="btn small" data-act="reset-yes" style="background:var(--bad-bg)">Xóa</button><button class="btn small" data-act="reset-no">Thôi</button>`; },
-    'reset-yes'() { S.stickers = {}; S.stars = 0; S.best = {}; S.played = 0; save(); render(); toast('Đã xóa tiến độ. Mình bắt đầu lại nhé!'); },
+    'reset-yes'() { S.stickers = {}; S.stars = 0; S.best = {}; S.played = 0; S.practice = {}; save(); render(); toast('Đã xóa tiến độ. Mình bắt đầu lại nhé!'); },
     'reset-no'() { render(); },
     sound() { S.sound = !S.sound; save(); if (S.sound) sfx.pop(); }
   };
@@ -490,8 +610,10 @@
     document.title = r.startsWith('cau-') && byId[r.slice(4)] ? `${firstLine(byId[r.slice(4)])} · Kho Báu Lời Ông Bà` : 'Kho Báu Lời Ông Bà';
   }
   let lastRoute = null;
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && P) closePx(); });
   window.addEventListener('hashchange', () => {
     const r = location.hash.slice(1);
+    if (P) closePx();
     if (r.startsWith('choi-') && (!G || G.id !== r.slice(5) || G.over)) { const k = G && G.kho; G = null; newGame(r.slice(5), k); }
     render(); if (r !== lastRoute) window.scrollTo(0, 0); lastRoute = r;
   });
