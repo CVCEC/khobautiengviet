@@ -611,6 +611,15 @@
   }
   let lastRoute = null;
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && P) closePx(); });
+
+  /* ── chỉ xem, không sao chép: chặn chuột phải, nhấn giữ, kéo thả ảnh, lưu trang và in ── */
+  const editable = (t) => t && t.closest && t.closest('input, textarea, [contenteditable="true"]');
+  document.addEventListener('contextmenu', (e) => { if (!editable(e.target)) { e.preventDefault(); if (e.target.closest && e.target.closest('img, svg')) toast('Tranh chỉ để xem trực tuyến, các bạn không lưu về nhé!'); } });
+  document.addEventListener('dragstart', (e) => { if (e.target.closest && e.target.closest('img, svg, a')) e.preventDefault(); });
+  document.addEventListener('keydown', (e) => {
+    const k = (e.key || '').toLowerCase();
+    if ((e.ctrlKey || e.metaKey) && (k === 's' || k === 'p')) { e.preventDefault(); toast('Trang này chỉ để xem trực tuyến.'); }
+  });
   window.addEventListener('hashchange', () => {
     const r = location.hash.slice(1);
     if (P) closePx();

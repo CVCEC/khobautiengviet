@@ -222,10 +222,12 @@ window.ART = (function () {
       `<g transform="translate(160 160)"><path d="M-40 -20 L-60 10 M40 -20 L60 10 M0 -20 L0 14" stroke="${C.ink}" stroke-width="7" stroke-linecap="round"/><ellipse cx="0" cy="-24" rx="50" ry="10" fill="none" stroke="${C.ink}" stroke-width="7"/><path d="M-40 -34 Q-40 -80 0 -80 Q40 -80 40 -34Z" fill="${C.greyD}"/><ellipse cx="0" cy="-80" rx="30" ry="6" fill="${C.grey}"/><path d="M-20 -12 Q0 0 20 -12" stroke="${C.orange}" stroke-width="10" fill="none" stroke-linecap="round"/></g>` + bubble(14, 90, 90, 34, 'Đi chơi đi!', 'br', 13) + bubble(214, 100, 92, 34, 'Trốn học!', 'bl', 13)
   };
 
+  /* chữ chìm trên mọi tranh */
+  const WM = `<text x="314" y="194" text-anchor="end" font-family="Nunito, Arial, sans-serif" font-weight="800" font-size="7.5" fill="#FFFDF8" fill-opacity=".85" stroke="#3A3B3C" stroke-opacity=".35" stroke-width="1.6" paint-order="stroke" style="pointer-events:none">© CVCEC · Trường Tiếng Việt Của Em · Chỉ xem, không sao chép</text>`;
   function scene(id) {
     const f = S[id];
     const body = f ? f() : BG.day();
-    return `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true" preserveAspectRatio="xMidYMid slice">${body}</svg>`;
+    return `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true" preserveAspectRatio="xMidYMid slice">${body}${WM}</svg>`;
   }
   return { scene, C, star, custom: {} };
 })();
