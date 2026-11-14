@@ -4,10 +4,10 @@
   /* Màu thương hiệu và phông trỏ sang bộ mẫu chung "Làng Trâu Con" (--ttv-*); màu góc học khobau do cvcec-chung.js gán */
   --paper: var(--ttv-nen); --paper-2: var(--ttv-vien); --card: var(--ttv-the); --ink: var(--ttv-chu); --muted: var(--ttv-chu-phu); --line: var(--ttv-vien);
   --straw: var(--ttv-goc); --straw-l: var(--ttv-goc-nhat); --wood: var(--ttv-goc-dam); --wood-d: var(--ttv-goc-dam);
-  --leaf: #6FA86A; --leaf-d: #3E7A47; --peach: #F2B28F;
-  --tn: #3E7A47; --tn-bg: #E2EED8; --tn-mid: #B9D7A6;
-  --tg: #A0622A; --tg-bg: #F5E4C4; --tg-mid: #E6C489;
-  --cd: #BE5A48; --cd-bg: #F9DED3; --cd-mid: #EFB3A1;
+  --leaf: #6FA86A; --leaf-d: #3B7443; --peach: #F2B28F;
+  --tn: #3B7443; --tn-bg: #E2EED8; --tn-mid: #B9D7A6;
+  --tg: #905826; --tg-bg: #F5E4C4; --tg-mid: #E6C489;
+  --cd: #A24939; --cd-bg: #F9DED3; --cd-mid: #EFB3A1;
   --good: #3B8148; --good-bg: #DCEFD7; --bad: #B9503D; --bad-bg: #FADCD4; --sky: #DCEEF0;
   --font: var(--ttv-phong); --font-head: var(--ttv-phong-tieu-de); --font-read: var(--ttv-phong-tap-doc);
   --r: 18px; --r-sm: 12px;

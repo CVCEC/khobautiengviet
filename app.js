@@ -33,16 +33,16 @@
     sound: (on) => on ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg>` : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M17 9l5 6M22 9l-5 6"/></svg>`,
     speak: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg>`,
     search: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>`,
-    sticker: (t) => `<svg class="sticker" viewBox="0 0 40 40" aria-label="Đã sưu tầm"><circle cx="20" cy="20" r="18" fill="${{ 'thanh-ngu': '#3E7A47', 'tuc-ngu': '#A0622A', 'ca-dao': '#BE5A48' }[t]}" stroke="#FFFDF8" stroke-width="3"/><path d="M20 9l3.2 6.6 7.2.9-5.3 4.9 1.4 7.1L20 25l-6.5 3.5 1.4-7.1-5.3-4.9 7.2-.9z" fill="#F6D36B"/></svg>`,
+    sticker: (t) => `<svg class="sticker" viewBox="0 0 40 40" aria-label="Đã sưu tầm"><circle cx="20" cy="20" r="18" fill="${{ 'thanh-ngu': '#3B7443', 'tuc-ngu': '#905826', 'ca-dao': '#A24939' }[t]}" stroke="#FFFDF8" stroke-width="3"/><path d="M20 9l3.2 6.6 7.2.9-5.3 4.9 1.4 7.1L20 25l-6.5 3.5 1.4-7.1-5.3-4.9 7.2-.9z" fill="#F6D36B"/></svg>`,
     basket: (c) => `<svg viewBox="0 0 44 34" aria-hidden="true"><path d="M4 12h36l-4 20H8z" fill="${c}"/><path d="M8 12q14 -18 28 0" stroke="${c}" stroke-width="3" fill="none"/><path d="M10 18h24M11 24h22" stroke="#FFFDF8" stroke-width="2" opacity=".6"/></svg>`
   };
   const G_ICON = {
-    'dien-tu': `<svg viewBox="0 0 28 28" fill="none" stroke="#3E7A47" stroke-width="2.6" stroke-linecap="round"><path d="M3 20h6M12 20h4M19 20h6"/><path d="M12 24h4" stroke="#DDAA55" stroke-width="3.4"/><path d="M16 4l5 5-9 9H7v-5z" fill="#E2EED8"/></svg>`,
+    'dien-tu': `<svg viewBox="0 0 28 28" fill="none" stroke="#3B7443" stroke-width="2.6" stroke-linecap="round"><path d="M3 20h6M12 20h4M19 20h6"/><path d="M12 24h4" stroke="#DDAA55" stroke-width="3.4"/><path d="M16 4l5 5-9 9H7v-5z" fill="#E2EED8"/></svg>`,
     'xep-chu': `<svg viewBox="0 0 28 28"><rect x="2" y="15" width="10" height="9" rx="2" fill="#C68B59"/><rect x="14" y="15" width="12" height="9" rx="2" fill="#DDAA55"/><rect x="7" y="4" width="12" height="9" rx="2" fill="#6FA86A"/></svg>`,
-    'noi-cau': `<svg viewBox="0 0 28 28" fill="none" stroke-width="2.6" stroke-linecap="round"><rect x="2" y="4" width="9" height="7" rx="2" fill="#F3DFB4" stroke="#C68B59"/><rect x="17" y="17" width="9" height="7" rx="2" fill="#F9DED3" stroke="#BE5A48"/><path d="M11 8q8 0 6 12" stroke="#3A3B3C" stroke-dasharray="2 3"/></svg>`,
+    'noi-cau': `<svg viewBox="0 0 28 28" fill="none" stroke-width="2.6" stroke-linecap="round"><rect x="2" y="4" width="9" height="7" rx="2" fill="#F3DFB4" stroke="#C68B59"/><rect x="17" y="17" width="9" height="7" rx="2" fill="#F9DED3" stroke="#A24939"/><path d="M11 8q8 0 6 12" stroke="#3A3B3C" stroke-dasharray="2 3"/></svg>`,
     'tham-tu': `<svg viewBox="0 0 28 28" fill="none" stroke-width="2.8" stroke-linecap="round"><circle cx="12" cy="12" r="7.5" fill="#DCEEF0" stroke="#3A3B3C"/><path d="M18 18l7 7" stroke="#C68B59" stroke-width="4"/><path d="M9 10q3-3 6 0" stroke="#7FB3D9"/></svg>`,
-    'phan-loai': `<svg viewBox="0 0 28 28"><path d="M1 14h8l-1 10H2z" fill="#3E7A47"/><path d="M10 14h8l-1 10h-6z" fill="#A0622A"/><path d="M19 14h8l-1 10h-6z" fill="#BE5A48"/><rect x="9" y="3" width="10" height="7" rx="2" fill="#F6D36B"/></svg>`,
-    'tim-van': `<svg viewBox="0 0 28 28" fill="none" stroke-linecap="round"><path d="M4 20q10 -16 20 0" stroke="#BE5A48" stroke-width="2.6" stroke-dasharray="3 3"/><circle cx="4" cy="21" r="3.5" fill="#BE5A48"/><circle cx="24" cy="21" r="3.5" fill="#BE5A48"/><path d="M12 9V3l6-1v6" stroke="#3A3B3C" stroke-width="2"/></svg>`,
+    'phan-loai': `<svg viewBox="0 0 28 28"><path d="M1 14h8l-1 10H2z" fill="#3B7443"/><path d="M10 14h8l-1 10h-6z" fill="#905826"/><path d="M19 14h8l-1 10h-6z" fill="#A24939"/><rect x="9" y="3" width="10" height="7" rx="2" fill="#F6D36B"/></svg>`,
+    'tim-van': `<svg viewBox="0 0 28 28" fill="none" stroke-linecap="round"><path d="M4 20q10 -16 20 0" stroke="#A24939" stroke-width="2.6" stroke-dasharray="3 3"/><circle cx="4" cy="21" r="3.5" fill="#A24939"/><circle cx="24" cy="21" r="3.5" fill="#A24939"/><path d="M12 9V3l6-1v6" stroke="#3A3B3C" stroke-width="2"/></svg>`,
     'lat-the': `<svg viewBox="0 0 28 28"><rect x="3" y="6" width="12" height="16" rx="3" fill="#DDAA55" transform="rotate(-10 9 14)"/><rect x="13" y="6" width="12" height="16" rx="3" fill="#FFFDF8" stroke="#6FA86A" stroke-width="2" transform="rotate(8 19 14)"/><circle cx="19" cy="14" r="3" fill="#EE9DA9"/></svg>`
   };
   const GAMES = [
@@ -78,27 +78,21 @@
   }
   const sfx = { ok: () => tone([660, 880]), bad: () => tone([240, 190], 0.2, 'triangle'), flip: () => tone([540], 0.06, 'triangle', 0, 0.1), win: () => tone([523, 659, 784, 1047], 0.2, 'sine', 0.12), pop: () => tone([720, 960], 0.08, 'sine', 0.06, 0.12) };
 
-  /* ── đọc to ── */
-  let voices = [];
-  const loadVoices = () => { try { voices = speechSynthesis.getVoices(); } catch (e) { voices = []; } };
-  if ('speechSynthesis' in window) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+  /* ── đọc to: chỉ phát tệp giọng chuẩn của trường (audio/<mã>.mp3 khai báo trong AUDIO ở data.js); câu chưa có tệp thì không hiện nút ── */
+  const hasAudio = (it) => !!(it && D.AUDIO && D.AUDIO[it.id]);
+  let voice = null;
   function speak(it) {
-    if (D.AUDIO && D.AUDIO[it.id]) { new Audio(`audio/${it.id}.mp3`).play().catch(() => {}); return; }
-    if (!('speechSynthesis' in window)) { toast('Trình duyệt này chưa đọc to được. Các bạn đọc to cùng bố mẹ nhé!'); return; }
-    loadVoices();
-    const v = voices.find((x) => /^vi/i.test(x.lang));
-    if (!v) { toast('Máy này chưa có giọng đọc tiếng Việt. Các bạn đọc to cùng bố mẹ nhé!'); return; }
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(it.text || it.lines.join(', '));
-    u.voice = v; u.lang = v.lang; u.rate = 0.82;
-    speechSynthesis.speak(u);
+    if (!hasAudio(it)) return;
+    if (voice) { voice.pause(); voice.currentTime = 0; }
+    voice = new Audio(`audio/${it.id}.mp3`);
+    voice.play().catch(() => {});
   }
 
   let toastT;
   function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 3200); }
   function confetti(n = 36) {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const cols = ['#DDAA55', '#6FA86A', '#F2B28F', '#BE5A48', '#7FB3D9', '#F6D36B'];
+    const cols = ['#DDAA55', '#6FA86A', '#F2B28F', '#A24939', '#7FB3D9', '#F6D36B'];
     for (let i = 0; i < n; i++) {
       const c = document.createElement('i'); c.className = 'confetti';
       c.style.left = Math.random() * 100 + 'vw'; c.style.background = rand(cols); c.style.animationDelay = Math.random() * 0.4 + 's'; c.style.animationDuration = 1.2 + Math.random() * 0.9 + 's';
@@ -187,7 +181,7 @@
         <div id="detail-body">
           <span class="kind">${T.name}</span>
           ${say}
-          <div class="row"><button class="btn small" data-act="speak" data-id="${it.id}">${I.speak} Nghe đọc</button>${it.lines ? `<button class="btn small" data-act="count" aria-pressed="false">Đếm tiếng &amp; tìm vần</button>` : `<button class="btn small" data-act="all-en" aria-pressed="false">Hiện nghĩa từng tiếng</button>`}${enBtn('item-en', 'English')}</div>
+          <div class="row">${hasAudio(it) ? `<button class="btn small" data-act="speak" data-id="${it.id}">${I.speak} Nghe đọc</button>` : ''}${it.lines ? `<button class="btn small" data-act="count" aria-pressed="false">Đếm tiếng &amp; tìm vần</button>` : `<button class="btn small" data-act="all-en" aria-pressed="false">Hiện nghĩa từng tiếng</button>`}${enBtn('item-en', 'English')}</div>
           <div class="en-text" id="item-en" hidden><p>${esc(it.en)}</p><p style="margin-top:6px"><b>Similar in English:</b> ${esc(it.enEq)}</p></div>
           <div class="blocks">${blocks.join('')}</div>
           <div class="collect" id="collect">${collectInner(it, got)}</div>
@@ -305,9 +299,9 @@
     return `<section class="book-head"><img src="${IMG(total >= 30 ? 'cheer' : 'reading')}" alt=""><div><h1>Sổ sưu tầm</h1><p>${total === 0 ? 'Sổ còn trống. Các bạn mở một kho báu, đọc một câu rồi làm 4 bài luyện tập nhỏ nhé.' : total === 60 ? 'Các bạn đã sưu tầm đủ 60 viên ngọc! Mình tự hào về các bạn lắm!' : `Các bạn đã có ${total} viên ngọc. Còn ${60 - total} viên nữa thôi!`}</p>
         <div class="stats"><span class="stat"><b>${total}</b>/60 câu</span><span class="stat"><b>${S.stars}</b> ngôi sao</span><span class="stat"><b>${S.played}</b> lượt chơi</span></div></div></section>
       <section class="section"><div class="section-head"><h2>Huy hiệu</h2></div><div class="badges">
-        ${badge(nStick('thanh-ngu') === 20, 'Nhà thám hiểm Thành ngữ', 'Sưu tầm đủ 20 thành ngữ', '#3E7A47')}
-        ${badge(nStick('tuc-ngu') === 20, 'Nhà thông thái Tục ngữ', 'Sưu tầm đủ 20 tục ngữ', '#A0622A')}
-        ${badge(nStick('ca-dao') === 20, 'Nghệ sĩ Ca dao', 'Sưu tầm đủ 20 ca dao', '#BE5A48')}
+        ${badge(nStick('thanh-ngu') === 20, 'Nhà thám hiểm Thành ngữ', 'Sưu tầm đủ 20 thành ngữ', '#3B7443')}
+        ${badge(nStick('tuc-ngu') === 20, 'Nhà thông thái Tục ngữ', 'Sưu tầm đủ 20 tục ngữ', '#905826')}
+        ${badge(nStick('ca-dao') === 20, 'Nghệ sĩ Ca dao', 'Sưu tầm đủ 20 ca dao', '#A24939')}
         ${badge(GAMES.every((g) => S.best[g.id]), 'Vua trò chơi', 'Chơi đủ cả 7 trò', '#7FB3D9')}
         ${badge(S.stars >= 50, 'Ngôi sao sáng', 'Đạt 50 ngôi sao', '#DDAA55')}</div></section>
       ${TK.map((t) => `<section class="section"><div class="section-head"><h2>${TYPES[t].name}</h2><p>${nStick(t)}/20</p></div><div class="slots">${ofType(t).map((it) => S.stickers[it.id]

@@ -27,7 +27,7 @@ Mini-website thành ngữ, tục ngữ, ca dao của **Trường Tiếng Việt 
 
 ## Thêm giọng đọc thật (giọng Elio) sau này
 
-Hiện nút "Nghe đọc" dùng giọng tiếng Việt có sẵn trên máy (nếu máy có). Khi có file ghi âm:
+Trang không dùng giọng máy của thiết bị. Nút "Nghe đọc" chỉ hiện ở câu đã có tệp ghi âm giọng chuẩn của trường; câu chưa có tệp thì ẩn nút. Khi có file ghi âm:
 
 1. Đặt file vào thư mục `audio/`, đặt tên theo mã câu, ví dụ `audio/tn01.mp3`, `audio/cd05.mp3`.
 2. Mở `data.js`, tìm dòng cuối `return { TYPES, items, AUDIO: {} };` và ghi các câu đã có file, ví dụ:
