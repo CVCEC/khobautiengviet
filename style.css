@@ -1,14 +1,15 @@
 /* Layout: thanh trên cố định (logo trái), một cột giữa rộng tối đa 1120px; kho = lưới thẻ tranh; trò chơi = sân khấu + Trâu Con nói ở dưới.
    Một giao diện sáng (giấy be) theo thương hiệu, cố ý không có chế độ tối. */
 :root {
-  --paper: #F4F0EA; --paper-2: #ECE4D6; --card: #FFFDF8; --ink: #3A3B3C; --muted: #6E665C; --line: #E0D5C3;
-  --straw: #DDAA55; --straw-l: #F3DFB4; --wood: #C68B59; --wood-d: #8C5A31;
+  /* Màu thương hiệu và phông trỏ sang bộ mẫu chung "Làng Trâu Con" (--ttv-*); màu góc học khobau do cvcec-chung.js gán */
+  --paper: var(--ttv-nen); --paper-2: var(--ttv-vien); --card: var(--ttv-the); --ink: var(--ttv-chu); --muted: var(--ttv-chu-phu); --line: var(--ttv-vien);
+  --straw: var(--ttv-goc); --straw-l: var(--ttv-goc-nhat); --wood: var(--ttv-goc-dam); --wood-d: var(--ttv-goc-dam);
   --leaf: #6FA86A; --leaf-d: #3E7A47; --peach: #F2B28F;
   --tn: #3E7A47; --tn-bg: #E2EED8; --tn-mid: #B9D7A6;
   --tg: #A0622A; --tg-bg: #F5E4C4; --tg-mid: #E6C489;
   --cd: #BE5A48; --cd-bg: #F9DED3; --cd-mid: #EFB3A1;
   --good: #3B8148; --good-bg: #DCEFD7; --bad: #B9503D; --bad-bg: #FADCD4; --sky: #DCEEF0;
-  --font: 'Nunito', 'Arial Rounded MT Bold', 'Trebuchet MS', Arial, sans-serif;
+  --font: var(--ttv-phong); --font-head: var(--ttv-phong-tieu-de); --font-read: var(--ttv-phong-tap-doc);
   --r: 18px; --r-sm: 12px;
   --step--1: 0.875rem; --step-0: 1.0625rem; --step-1: 1.25rem; --step-2: 1.6rem; --step-3: 2.1rem; --step-4: clamp(2.2rem, 6vw, 3.6rem);
   color-scheme: light;
@@ -24,7 +25,7 @@ img { max-width: 100%; }
 a { color: inherit; }
 button { font: inherit; color: inherit; cursor: pointer; }
 :focus-visible { outline: 3px solid var(--straw); outline-offset: 2px; border-radius: 8px; }
-h1, h2, h3 { font-weight: 900; line-height: 1.15; text-wrap: balance; margin: 0; }
+h1, h2, h3 { font-family: var(--font-head); font-weight: 800; line-height: 1.15; text-wrap: balance; margin: 0; }
 p { margin: 0; }
 .wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 
@@ -44,10 +45,8 @@ p { margin: 0; }
 .icon-btn { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--line); background: var(--card); display: grid; place-items: center; }
 .icon-btn svg { width: 20px; height: 20px; }
 @media (max-width: 760px) {
-  .top .wrap { flex-wrap: wrap; row-gap: 4px; }
-  .logo img { height: 38px; }
-  .tools { margin-left: auto; }
-  .nav { order: 3; flex-basis: 100%; padding-bottom: 4px; }
+  /* logo đã nằm trên thanh chung của bộ mẫu: menu và công cụ chung một hàng */
+  .top .wrap { gap: 8px; }
 }
 
 main { padding-block: 22px 40px; }
@@ -59,7 +58,7 @@ main { padding-block: 22px 40px; }
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 10px 20px; border-radius: 999px; border: 2px solid var(--ink); background: var(--card); font-weight: 900; text-decoration: none; box-shadow: 0 3px 0 var(--ink); transition: transform .08s; }
 .btn:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--ink); }
 .btn.primary { background: var(--straw); }
-.btn.green { background: var(--leaf); color: #fff; }
+.btn.green { background: var(--ttv-dung); color: #fff; }
 .btn.small { min-height: 40px; padding: 6px 14px; font-size: 0.95rem; }
 .btn svg { width: 20px; height: 20px; }
 .btn[disabled] { opacity: .5; cursor: default; }
@@ -77,7 +76,7 @@ main { padding-block: 22px 40px; }
 /* ── trang đầu ── */
 .hero { display: grid; grid-template-columns: 1.25fr 1fr; gap: 24px; align-items: center; background: var(--card); border: 2px solid var(--line); border-radius: 28px; padding: clamp(20px, 4vw, 40px); position: relative; overflow: hidden; }
 .hero::after { content: ""; position: absolute; right: -60px; bottom: -80px; width: 340px; height: 340px; border-radius: 50%; background: var(--straw-l); opacity: .7; z-index: 0; }
-.hero > * { position: relative; z-index: 1; min-width: 0; }
+.hero > :not(.ttv-canh-trang-tri) { position: relative; z-index: 1; min-width: 0; }
 .hero h1 { font-size: var(--step-4); margin: 8px 0 14px; letter-spacing: -.01em; }
 .hero h1 span { color: var(--wood); }
 .hero .lead { font-size: var(--step-1); max-width: 34ch; margin-bottom: 20px; font-weight: 700; }
@@ -85,6 +84,11 @@ main { padding-block: 22px 40px; }
 .hero-trau img { width: min(230px, 60vw); height: auto; }
 .say-bubble { position: relative; background: var(--card); border: 2px solid var(--ink); border-radius: 18px; padding: 10px 14px; font-weight: 800; max-width: 280px; text-align: center; }
 .say-bubble::after { content: ""; position: absolute; left: 50%; bottom: -10px; width: 16px; height: 16px; background: var(--card); border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink); transform: translateX(-50%) rotate(45deg); }
+/* màn chào: nền trời – mây – ruộng của bộ mẫu */
+.hero.ttv-canh { background: var(--ttv-troi); border-color: var(--ttv-vien); padding-bottom: calc(clamp(20px, 4vw, 40px) + 110px); }
+.hero.ttv-canh::after { content: none; }
+.hero.ttv-canh .eyebrow { color: var(--ttv-chu); }
+@media (max-width: 760px) { .hero.ttv-canh { padding-bottom: calc(20px + 80px); } }
 @media (max-width: 760px) { .hero { grid-template-columns: 1fr; } .hero-trau { order: -1; } .hero-trau img { width: 150px; } }
 
 .chests { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
@@ -366,3 +370,6 @@ body { -webkit-touch-callout: none; }
   body > *:not(.print-note) { display: none !important; }
   .print-note { display: block !important; padding: 40px; font: 700 16px/1.5 Arial, sans-serif; color: #3A3B3C; text-align: center; }
 }
+
+/* chữ cho bé tập đọc: câu thành ngữ, tục ngữ, ca dao */
+.big-say, .poem .ln, .q-text, .today .say-text, .story { font-family: var(--font-read); font-weight: 700; }

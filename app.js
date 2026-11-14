@@ -129,7 +129,7 @@
     const day = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 864e5);
     const today = ITEMS[(day * 7) % ITEMS.length];
     const chest = (t, art) => { const T = TYPES[t]; return `<a class="chest" href="#${t}" style="${cvars(t)}"><div class="pic">${ART.scene(art)}</div><div class="body"><h3>${T.name}</h3><p class="tag">${T.short}</p><p class="def">${T.def}</p>${meter(nStick(t), ofType(t).length)}</div></a>`; };
-    return `<section class="hero">
+    return `<section class="hero ttv-canh">
         <div><p class="eyebrow">Góc đọc hiểu · Trường Tiếng Việt Của Em</p>
           <h1>Kho Báu <span>Lời Ông Bà</span></h1>
           <p class="lead">Thành ngữ, tục ngữ, ca dao là những lời hay ý đẹp ông bà để lại. Các bạn cùng Trâu Con đọc, hiểu nghĩa và chơi để sưu tầm đủ 60 viên ngọc nhé!</p>
@@ -607,6 +607,9 @@
     else if (r.startsWith('choi-') && gdef(r.slice(5))) html = viewGame(r.slice(5));
     else html = viewHome();
     app.innerHTML = html; setNav(r); updateTop();
+    /* bộ mẫu chung: màn chào có nền trời – ruộng; màn đọc và màn chơi nền kem trơn */
+    if (html.includes('class="hero ttv-canh"')) document.body.removeAttribute('data-ttv-nen'); else document.body.setAttribute('data-ttv-nen', 'don-gian');
+    if (window.TTV && TTV.trangTriCanh) TTV.trangTriCanh();
     document.title = r.startsWith('cau-') && byId[r.slice(4)] ? `${firstLine(byId[r.slice(4)])} · Kho Báu Lời Ông Bà` : 'Kho Báu Lời Ông Bà';
   }
   let lastRoute = null;
