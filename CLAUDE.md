@@ -3,7 +3,7 @@
 Đọc tệp này trước khi sửa bất kỳ trang nào của trường. Trả lời và viết commit bằng tiếng Việt.
 
 ## Bối cảnh
-- Chương trình "Trường Tiếng Việt Của Em" của CVCEC – Canada Vietnam Cultural & Educational Council: lớp văn hoá và tiếng Việt trên web, miễn phí, cho trẻ 5–12 tuổi (tới 14), phần lớn học trên iPad và điện thoại. CVCEC tự xây dựng và quản lý toàn bộ.
+- Chương trình "Trường Tiếng Việt Của Em" của CVCEC – Canada Vietnam Cultural & Educational Council: nền tảng học tiếng Việt và văn hoá trên web, miễn phí, cho mọi lứa tuổi từ trẻ 5 tuổi tới người lớn. Người học chủ yếu là người nước ngoài và trẻ Việt kiều chưa nói được tiếng Việt (bắt đầu từ số 0). Phần lớn học trên iPad và điện thoại. CVCEC tự xây dựng và quản lý toàn bộ.
 - Cổng chính: https://vietclass.cvcec.org (kho CVCEC/cong-truong-tieng-viet), nhúng từng góc học trong khung iframe.
 
 ## Các trang (GitHub Pages, DNS tại Nhân Hòa, tên miền cvcec.org đã xác minh với GitHub)
@@ -15,6 +15,7 @@
 - truyencotich.cvcec.org – CVCEC/truyencotich
 - cuocsong.cvcec.org – CVCEC/baihoccuocsong
 - nguphap.cvcec.org – CVCEC/nguphap
+- hatca.cvcec.org – CVCEC/hatca
 - trienlam.cvcec.org – CVCEC/trien-lam-em-hoc-tieng-viet
 - mau.cvcec.org – CVCEC/mau-chung (bộ mẫu chung)
 
@@ -34,15 +35,28 @@
 4. Chạy tốt trong khung iframe của cổng: không chặn nhúng khung; âm thanh phát sau khi bé chạm; không phụ thuộc window.top.
 5. Tiếng Việt: chuẩn hoá NFC khi so sánh chữ; đọc chữ cái theo âm (a, bờ, cờ, dờ…); không ghi cách đọc dưới chữ.
 6. Trâu Con xưng "mình", gọi học sinh "các bạn"; hiền, ấm, chậm.
-7. Âm thanh dùng tệp giọng chuẩn của trường; không dùng giọng máy của thiết bị (speechSynthesis).
-   - Ngoại lệ tạm thời – kho truyencotich: giữ giọng máy làm dự phòng khi chưa có tệp giọng Elio trong audio/, vì đọc to là phần chính của truyện. Không gỡ giọng máy cho đến khi đủ 290 tệp trong AM-THANH.md của kho đó.
+7. Âm thanh: ưu tiên tệp giọng chuẩn của trường. Từ 17-11-2026, khi chưa có tệp thì TẠM dùng giọng máy của thiết bị, nhưng chỉ qua bộ mẫu: `TTV.phat({tep, chu})` (có tệp thì phát tệp, không có thì đọc `chu`) hoặc `TTV.giong.doc(chu)`. Không gọi speechSynthesis trực tiếp trong trang. Tên chữ cái đưa cho giọng máy theo âm (`TTV.giong.tenChuCai("b")` → "bờ"). Câu cần thu âm ghi vào kịch bản thu âm (am-thanh/ của kho mau-chung).
 8. Không đưa tên, logo Khai Minh Đức lên game và slide.
 9. Không hiện tên trẻ, phụ huynh. Triển lãm và Về Nhà Em chỉ để xem (hạn chế tải về) và có ghi chú điều khoản sử dụng, liên hệ contact@cvcec.org.
 10. Mỗi trang tối đa 1 GB; mỗi tệp dưới 25 MB. Hỏi tôi trước khi thêm video mới.
 11. Dùng tốt ở iPad (1024px) và điện thoại (390px); vùng chạm tối thiểu 44px.
 
+## Lộ trình học (từ 17-11-2026)
+- Mọi góc học đi theo một lộ trình chung "Đường làng của Trâu Con", đối chiếu Khung năng lực tiếng Việt dùng cho người nước ngoài (TT 17/2015/TT-BGDĐT): Bậc 0 Làm quen (chặng riêng của trường), Sơ cấp Bậc 1–2, Trung cấp Bậc 3–4. Không gọi là chứng chỉ.
+- Nguồn duy nhất: v1/ttv-lo-trinh.js trong kho mau-chung (`TTV_LO_TRINH`): các bậc, câu "Mình làm được…" cho Nghe, Nói, Đọc, Viết, chủ điểm và nhãn bậc của từng bài. Bài mới phải được gắn nhãn ở đó.
+- Nhóm người học dùng chung mã: "5-8", "9-14", "nguoi-lon".
+- Người mới học phần lớn chưa đọc được tiếng Việt: Bậc 0–2 có lời hướng dẫn tiếng Anh (nút VI/EN), Bậc 3 trở đi giảm dần.
+- Không xáo trộn các góc học đang có: lộ trình chỉ gắn nhãn và sắp thứ tự, không đổi nội dung bài.
+
+## Tài khoản và dữ liệu học
+- Chỉ người học có tài khoản và xem thành tích của mình (Góc học tập của em). Không làm chế độ, bảng theo dõi hay tài khoản riêng cho giáo viên, phụ huynh. Người dưới 13 tuổi do cha mẹ đăng ký và đồng ý (đã có ở cổng), nhưng không có trang theo dõi riêng cho cha mẹ.
+- Giáo viên chỉ có tab "Hoạt động" (gợi ý hoạt động trên lớp) của cổng; không làm thêm hướng dẫn giáo viên.
+- Góc học không tự ghi vào Firebase. Khi người học chơi xong một trò, góc học gọi `TTV.ghiKetQua({bai, hoatDong, soTroChoi, diem, diemToiDa, sao, thoiGianGiay})`; cổng ghi vào tài khoản.
+- Không thu ngày sinh, địa chỉ, số điện thoại, ảnh, giọng nói, vị trí. Luyện nói chỉ chạy trên máy. Không hiện tên thật.
+- Chỉ dùng dữ liệu cho nghiên cứu khi Chính sách bảo mật đã ghi mục đích này và người học (hoặc cha mẹ) đã đồng ý.
+
 ## Game bài học
-HTML/CSS/JS thuần; dữ liệu bài trong const BAI_HOC đầu script; chạm/kéo bằng Pointer Events; phản hồi "Đúng rồi!" / "Thử lại nhé".
+HTML/CSS/JS thuần; dữ liệu bài trong const BAI_HOC đầu script; chạm/kéo bằng Pointer Events; phản hồi "Đúng rồi!" / "Thử lại nhé"; xong một trò thì gọi `TTV.ghiKetQua(...)`.
 
 ## Cách làm việc
 - Trước khi sửa nhiều tệp, nêu kế hoạch ngắn và chờ tôi đồng ý.

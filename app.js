@@ -78,15 +78,26 @@
   }
   const sfx = { ok: () => tone([660, 880]), bad: () => tone([240, 190], 0.2, 'triangle'), flip: () => tone([540], 0.06, 'triangle', 0, 0.1), win: () => tone([523, 659, 784, 1047], 0.2, 'sine', 0.12), pop: () => tone([720, 960], 0.08, 'sine', 0.06, 0.12) };
 
-  /* ── đọc to: chỉ phát tệp giọng chuẩn của trường (audio/<mã>.mp3 khai báo trong AUDIO ở data.js); câu chưa có tệp thì không hiện nút ── */
+  /* ── đọc to (quy tắc 7): qua bộ mẫu TTV.phat({tep, chu}). Câu đã có tệp giọng chuẩn (audio/<mã>.mp3 khai báo trong AUDIO ở data.js)
+        thì phát tệp; chưa có tệp thì bộ mẫu tạm đọc bằng giọng máy. Trang không gọi giọng máy trực tiếp. ── */
   const hasAudio = (it) => !!(it && D.AUDIO && D.AUDIO[it.id]);
+  const ttvPhat = (muc) => { const T = window.TTV; if (!T) return null; if (T.phat) return T.phat(muc); return T.giong && T.giong.phat ? T.giong.phat(muc) : null; };
+  const ttvDung = () => { const T = window.TTV; try { if (T && T.giong && T.giong.dung) T.giong.dung(); } catch (e) { /* bỏ qua */ } };
   let voice = null;
   function speak(it) {
-    if (!hasAudio(it)) return;
-    if (voice) { voice.pause(); voice.currentTime = 0; }
-    voice = new Audio(`audio/${it.id}.mp3`);
+    if (!it) return;
+    if (voice) { voice.pause(); voice.currentTime = 0; voice = null; }
+    const tep = hasAudio(it) ? `audio/${it.id}.mp3` : undefined;
+    if (ttvPhat(tep ? { tep, chu: it.text || it.lines.join(', ') } : { chu: it.text || it.lines.join(', ') })) return;
+    if (!tep) return; // bộ mẫu chưa nạp: chỉ phát được tệp như trước
+    voice = new Audio(tep);
     voice.play().catch(() => {});
   }
+  /* ── ghi kết quả học lên cổng (bộ mẫu lo việc gửi; không tạo khoá localStorage mới) ── */
+  const ghiKQ = (kq) => { try { if (window.TTV && TTV.ghiKetQua) TTV.ghiKetQua(kq); } catch (e) { /* bỏ qua */ } };
+  const giay = (t0) => Math.round((Date.now() - (t0 || Date.now())) / 1000);
+  const saoTheoTiLe = (d, m) => { const r = m ? d / m : 0; return r >= 0.9 ? 3 : r >= 0.6 ? 2 : r > 0 ? 1 : 0; };
+  const HD_LUYEN = { dien: 'dien', xep: 'xep', nghia: 'hieu', tranh: 'tranh' };
 
   let toastT;
   function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 3200); }
@@ -181,7 +192,7 @@
         <div id="detail-body">
           <span class="kind">${T.name}</span>
           ${say}
-          <div class="row">${hasAudio(it) ? `<button class="btn small" data-act="speak" data-id="${it.id}">${I.speak} Nghe đọc</button>` : ''}${it.lines ? `<button class="btn small" data-act="count" aria-pressed="false">Đếm tiếng &amp; tìm vần</button>` : `<button class="btn small" data-act="all-en" aria-pressed="false">Hiện nghĩa từng tiếng</button>`}${enBtn('item-en', 'English')}</div>
+          <div class="row"><button class="btn small" data-act="speak" data-id="${it.id}">${I.speak} Nghe đọc</button>${it.lines ? `<button class="btn small" data-act="count" aria-pressed="false">Đếm tiếng &amp; tìm vần</button>` : `<button class="btn small" data-act="all-en" aria-pressed="false">Hiện nghĩa từng tiếng</button>`}${enBtn('item-en', 'English')}</div>
           <div class="en-text" id="item-en" hidden><p>${esc(it.en)}</p><p style="margin-top:6px"><b>Similar in English:</b> ${esc(it.enEq)}</p></div>
           <div class="blocks">${blocks.join('')}</div>
           <div class="collect" id="collect">${collectInner(it, got)}</div>
@@ -217,7 +228,7 @@
     const it = byId[id], ans = bare(tokAt(it, it.blank.at)), target = orderSource(it).split(' ').map(bare);
     let tiles; do { tiles = shuffle(target.map((t) => ({ t }))); } while (tiles.length > 1 && tiles.every((x, k) => x.t === target[k]));
     P = {
-      id, step: 0, score: 0, first: true, solved: false, wrong: new Set(), done: false, stars: 0,
+      id, step: 0, score: 0, first: true, solved: false, wrong: new Set(), done: false, stars: 0, t0: Date.now(),
       dien: { ans, opts: shuffle([ans, ...it.blank.opts]) },
       xep: { target, tiles, ans: [], part: it.lines ? 'Dòng đầu của bài ca dao' : orderSource(it) !== it.text ? 'Nửa đầu của câu' : '' },
       nghia: shuffle([it, ...distract(it, 2)]).map((o) => ({ id: o.id, t: shortMeaning(o) })),
@@ -273,7 +284,11 @@
     if (location.hash.startsWith('#cau-')) { const box = document.getElementById('collect'); const it = byId[location.hash.slice(5)]; if (box && it) box.innerHTML = collectInner(it, !!S.stickers[it.id]); }
   }
   function pSolve(ok, shakeSel) {
-    if (ok) { P.solved = true; if (P.first) P.score++; P.say = rand(SAY.ok); P.mood = rand(['cheer', 'thumbs-up']); sfx.ok(); drawPx(); }
+    if (ok) {
+      P.solved = true; if (P.first) P.score++;
+      const d = P.first ? 1 : 0;
+      ghiKQ({ bai: P.id, hoatDong: HD_LUYEN[P_STEPS[P.step].key], soTroChoi: 4, diem: d, diemToiDa: 1, sao: saoTheoTiLe(d, 1), thoiGianGiay: giay(P.t0) });
+      P.say = rand(SAY.ok); P.mood = rand(['cheer', 'thumbs-up']); sfx.ok(); drawPx(); }
     else { P.first = false; P.say = rand(SAY.bad); P.mood = 'thinking'; sfx.bad(); drawPx(shakeSel); }
   }
   function pFinish() {
@@ -429,7 +444,7 @@
 
   function newGame(id, kho) {
     const def = gdef(id); if (!def) return;
-    G = { id, kho: def.kinds ? (kho || (G && G.kho) || 'all') : 'all', i: 0, score: 0, solved: false, wrong: new Set(), first: true, say: 'Các bạn sẵn sàng chưa? Mình bắt đầu nhé!', mood: 'wave', over: false };
+    G = { id, kho: def.kinds ? (kho || (G && G.kho) || 'all') : 'all', i: 0, score: 0, solved: false, wrong: new Set(), first: true, say: 'Các bạn sẵn sàng chưa? Mình bắt đầu nhé!', mood: 'wave', over: false, t0: Date.now() };
     ENG[id].init(G);
     if (G.n === undefined) G.n = G.q.length;
   }
@@ -459,6 +474,8 @@
     if (G.id === 'lat-the') { G.stars = G.moves <= 10 ? 3 : G.moves <= 16 ? 2 : 1; }
     else { G.scoreMax = G.id === 'noi-cau' ? G.rounds.reduce((a, r) => a + r.length, 0) : G.n; ratio = G.score / G.scoreMax; G.stars = ratio >= 0.85 ? 3 : ratio >= 0.55 ? 2 : 1; }
     G.over = true; S.stars += G.stars; S.played += 1; S.best[G.id] = Math.max(S.best[G.id] || 0, G.stars); save();
+    const toiDa = G.id === 'lat-the' ? G.n : G.scoreMax;
+    ghiKQ({ bai: 'choi-' + G.id, hoatDong: G.id, soTroChoi: 1, diem: Math.min(G.score, toiDa), diemToiDa: toiDa, sao: G.stars, thoiGianGiay: giay(G.t0) });
     sfx.win(); confetti(G.stars * 18);
     render();
   }
@@ -509,7 +526,7 @@
     },
     'p-next'() {
       if (P.step >= 3) return pFinish();
-      P.step++; P.solved = false; P.first = true; P.wrong = new Set();
+      P.step++; P.solved = false; P.first = true; P.wrong = new Set(); P.t0 = Date.now();
       P.say = rand(['Bài tiếp theo nè!', 'Các bạn đọc thật kỹ nhé!', 'Mình cùng làm bài này nhé!']); P.mood = rand(['reading', 'listening', 'wave']);
       drawPx(); const b = document.querySelector('.px-box'); if (b) b.scrollTop = 0;
     },
@@ -576,7 +593,7 @@
     'reset-ask'() { document.getElementById('reset-box').innerHTML = `<span style="font-weight:800">Xóa hết câu đã sưu tầm và ngôi sao trên máy này?</span><button class="btn small" data-act="reset-yes" style="background:var(--bad-bg)">Xóa</button><button class="btn small" data-act="reset-no">Thôi</button>`; },
     'reset-yes'() { S.stickers = {}; S.stars = 0; S.best = {}; S.played = 0; S.practice = {}; save(); render(); toast('Đã xóa tiến độ. Mình bắt đầu lại nhé!'); },
     'reset-no'() { render(); },
-    sound() { S.sound = !S.sound; save(); if (S.sound) sfx.pop(); }
+    sound() { S.sound = !S.sound; save(); if (S.sound) sfx.pop(); else { ttvDung(); if (voice) { voice.pause(); voice = null; } } }
   };
   document.addEventListener('click', (e) => {
     const el = e.target.closest('[data-act]'); if (!el || el.disabled) return;

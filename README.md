@@ -27,13 +27,15 @@ Mini-website thành ngữ, tục ngữ, ca dao của **Trường Tiếng Việt 
 
 ## Thêm giọng đọc thật (giọng Elio) sau này
 
-Trang không dùng giọng máy của thiết bị. Nút "Nghe đọc" chỉ hiện ở câu đã có tệp ghi âm giọng chuẩn của trường; câu chưa có tệp thì ẩn nút. Khi có file ghi âm:
+Nút "Nghe đọc" đi qua bộ mẫu `TTV.phat({ tep, chu })` (quy tắc 7, từ 17-11-2026): câu đã có tệp ghi âm giọng chuẩn của trường thì phát tệp; câu chưa có tệp thì bộ mẫu tạm đọc bằng giọng máy. Trang không gọi speechSynthesis trực tiếp. Khi có file ghi âm:
 
 1. Đặt file vào thư mục `audio/`, đặt tên theo mã câu, ví dụ `audio/tn01.mp3`, `audio/cd05.mp3`.
 2. Mở `data.js`, tìm dòng cuối `return { TYPES, items, AUDIO: {} };` và ghi các câu đã có file, ví dụ:
    `AUDIO: { tn01: true, cd05: true }`
 
 ## Tiến độ của học sinh
+
+Ghi kết quả lên cổng (từ 17-11-2026): làm xong mỗi bài luyện của một câu thì gọi `TTV.ghiKetQua` với `bai` = mã câu (`tn01`, `tg05`, `cd12`), `hoatDong` = `dien` | `xep` | `hieu` | `tranh`, `soTroChoi` = 4; chơi xong một trong 7 trò chung thì `bai` = `choi-<mã trò>`, `hoatDong` = mã trò, `soTroChoi` = 1. Không thêm khoá localStorage mới.
 
 Câu đã sưu tầm và ngôi sao được lưu trên trình duyệt của từng máy (không cần đăng nhập).
 Đổi máy hoặc xóa dữ liệu trình duyệt thì bắt đầu lại.
