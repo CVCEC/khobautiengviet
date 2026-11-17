@@ -41,12 +41,17 @@
 10. Mỗi trang tối đa 1 GB; mỗi tệp dưới 25 MB. Hỏi tôi trước khi thêm video mới.
 11. Dùng tốt ở iPad (1024px) và điện thoại (390px); vùng chạm tối thiểu 44px.
 
-## Lộ trình học (từ 17-11-2026)
-- Mọi góc học đi theo một lộ trình chung "Đường làng của Trâu Con", đối chiếu Khung năng lực tiếng Việt dùng cho người nước ngoài (TT 17/2015/TT-BGDĐT): Bậc 0 Làm quen (chặng riêng của trường), Sơ cấp Bậc 1–2, Trung cấp Bậc 3–4. Không gọi là chứng chỉ.
-- Nguồn duy nhất: v1/ttv-lo-trinh.js trong kho mau-chung (`TTV_LO_TRINH`): các bậc, câu "Mình làm được…" cho Nghe, Nói, Đọc, Viết, chủ điểm và nhãn bậc của từng bài. Bài mới phải được gắn nhãn ở đó.
+## Lộ trình học (cập nhật 17-11-2026)
+- Hai hướng học tách bạch:
+  - "Làng học tập Trâu Con" cho trẻ dưới 15 tuổi: giữ nguyên các góc, học theo hứng thú; không hiện số thứ tự hay nhãn bậc. Thứ tự góc: Luyện nói – Luyện thanh, Tiếng Việt cơ bản, Văn hoá truyền thống, Ngữ pháp tiếng Việt, Khám phá Việt Nam, Hát cùng Trâu Con, Kho báu ca dao tục ngữ, Truyện cổ tích, Bài học cuộc sống.
+  - "Lộ trình theo khung năng lực" cho người học từ 15 tuổi: tab riêng của cổng (/lo-trinh/), xương sống là sách "Vui học tiếng Việt" Quyển 1–2, cùng với Về Nhà Em. Hai góc này có nhom: "lo-trinh" trong TTV_DANH_SACH. Sẽ mở rộng luyện nghe hội thoại, viết văn xuôi, chính tả, ngữ pháp nâng cao theo sườn Quyển 1–2 (soạn mẫu, duyệt rồi mới làm tiếp).
+  - Triển lãm xem công khai, đứng cuối, ngoài hai nhóm.
+- Lộ trình đối chiếu Khung năng lực tiếng Việt dùng cho người nước ngoài (TT 17/2015/TT-BGDĐT): Bậc 0 Làm quen (chặng riêng của trường), Sơ cấp Bậc 1–2, Trung cấp Bậc 3–4. Ghi "tham chiếu", không gọi là chứng chỉ hay "đạt chuẩn".
+- Nguồn: v1/ttv-lo-trinh.js trong kho mau-chung (`TTV_LO_TRINH`): các bậc, câu "Mình làm được…" cho Nghe, Nói, Đọc, Viết. Tab Lộ trình chỉ dùng nhãn bài của vuihoc và venhaem; nhãn của các góc trong Làng giữ lại trong tệp nhưng không hiện cho trẻ.
+- "Góc học tập của em" có hai loại: dưới 15 tuổi xem sao theo góc của Làng; 15+ xem tiến độ theo bậc và 4 kỹ năng của Lộ trình. Chọn theo nhóm tuổi trong hồ sơ; nhóm 13–17 tự chọn trên trang (lưu trên máy).
 - Nhóm người học dùng chung mã: "5-8", "9-14", "nguoi-lon".
-- Người mới học phần lớn chưa đọc được tiếng Việt: Bậc 0–2 có lời hướng dẫn tiếng Anh (nút VI/EN), Bậc 3 trở đi giảm dần.
-- Không xáo trộn các góc học đang có: lộ trình chỉ gắn nhãn và sắp thứ tự, không đổi nội dung bài.
+- Bậc 0–2 có lời hướng dẫn tiếng Anh (nút VI/EN), Bậc 3 trở đi giảm dần.
+- Không đổi nội dung bài khi sắp xếp lại.
 
 ## Tài khoản và dữ liệu học
 - Chỉ người học có tài khoản và xem thành tích của mình (Góc học tập của em). Không làm chế độ, bảng theo dõi hay tài khoản riêng cho giáo viên, phụ huynh. Người dưới 13 tuổi do cha mẹ đăng ký và đồng ý (đã có ở cổng), nhưng không có trang theo dõi riêng cho cha mẹ.
