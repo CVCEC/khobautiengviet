@@ -13,6 +13,8 @@
 - baihoc.cvcec.org – CVCEC/truong-tieng-viet
 - khobau.cvcec.org – CVCEC/khobautiengviet
 - truyencotich.cvcec.org – CVCEC/truyencotich
+- cuocsong.cvcec.org – CVCEC/baihoccuocsong
+- nguphap.cvcec.org – CVCEC/nguphap
 - trienlam.cvcec.org – CVCEC/trien-lam-em-hoc-tieng-viet
 - mau.cvcec.org – CVCEC/mau-chung (bộ mẫu chung)
 
@@ -33,6 +35,7 @@
 5. Tiếng Việt: chuẩn hoá NFC khi so sánh chữ; đọc chữ cái theo âm (a, bờ, cờ, dờ…); không ghi cách đọc dưới chữ.
 6. Trâu Con xưng "mình", gọi học sinh "các bạn"; hiền, ấm, chậm.
 7. Âm thanh dùng tệp giọng chuẩn của trường; không dùng giọng máy của thiết bị (speechSynthesis).
+   - Ngoại lệ tạm thời – kho truyencotich: giữ giọng máy làm dự phòng khi chưa có tệp giọng Elio trong audio/, vì đọc to là phần chính của truyện. Không gỡ giọng máy cho đến khi đủ 290 tệp trong AM-THANH.md của kho đó.
 8. Không đưa tên, logo Khai Minh Đức lên game và slide.
 9. Không hiện tên trẻ, phụ huynh. Triển lãm và Về Nhà Em chỉ để xem (hạn chế tải về) và có ghi chú điều khoản sử dụng, liên hệ contact@cvcec.org.
 10. Mỗi trang tối đa 1 GB; mỗi tệp dưới 25 MB. Hỏi tôi trước khi thêm video mới.
@@ -45,3 +48,4 @@ HTML/CSS/JS thuần; dữ liệu bài trong const BAI_HOC đầu script; chạm/
 - Trước khi sửa nhiều tệp, nêu kế hoạch ngắn và chờ tôi đồng ý.
 - Làm từng trang một; không sửa nội dung bài học khi không được yêu cầu.
 - Sau khi đẩy lên, liệt kê link để tôi kiểm tra trên iPad.
+- Khi chép CLAUDE.md vào một kho đã có CLAUDE.md, giữ lại các dòng NGOẠI LỆ RIÊNG của kho đó.
