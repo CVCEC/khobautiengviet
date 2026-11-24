@@ -1,13 +1,10 @@
-Lô 20 câu – Gemini không trả tiếng: không có tiếng trả về: {"candidates": [{"finishReason": "SAFETY", "index": 0, "finishMessage": "The audio stream could not be completed. Please retry your reque
-Lô 20 câu – Gemini không trả tiếng: không có tiếng trả về: {"candidates": [{"finishReason": "SAFETY", "index": 0, "finishMessage": "The audio stream could not be completed. Please retry your reque
-Lô 10 câu – Gemini không trả tiếng: không có tiếng trả về: {"candidates": [{"finishReason": "SAFETY", "index": 0, "finishMessage": "The audio stream could not be completed. Please retry your reque
-0.50  Ếch ngồi đáy giếng  |  ít ngồi đáy diễn
-0.25  Đàn gảy tai trâu  |  đàn gầy tái châu
-1.00  Nước đổ đầu vịt  |  Nước đổ đầu vịt
-1.00  Đầu voi đuôi chuột  |  Đầu voi đuôi chuột
-0.80  Mèo mù vớ cá rán  |  Mèo mù vỡ cá rán
-1.00  Cưỡi ngựa xem hoa  |  Cưỡi ngựa xem hoa
-1.00  Như cá gặp nước  |  Như cá gặp nước
-1.00  Chậm như rùa  |  Chậm như rùa
-1.00  Nhanh như sóc  |  Nhanh như sóc
-0.33  Khỏe như voi  |  Huệ như vói
+1.00  Vui như Tết  |  Vui như Tết
+1.00  Nước đến chân mới nhảy  |  Nước đến chân mới nhảy
+1.00  Thùng rỗng kêu to  |  Thùng rỗng kêu to
+1.00  Như chó với mèo  |  Như chó với mèo
+0.75  Ba chân bốn cẳng  |  Ba chân, bốn cặng
+0.00  Mắt nhắm mắt mở  |  Mất nhẩm, mất mờ
+0.67  Nói như vẹt  |  nổi như vẹt
+1.00  Học một biết mười  |  Học một, biết mười
+1.00  Một nắng hai sương  |  một nắng, hai sương
+1.00  Có một không hai  |  Có một không hai

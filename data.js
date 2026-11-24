@@ -586,5 +586,5 @@ window.KHO = (function () {
       tags: ['kien-dinh'], blank: { at: [1, 6], opts: ['hai', 'bốn'] }, rhyme: { hide: [1, 5], with: [0, 5], opts: ['bàn', 'ghế'] } }
   ];
 
-  return { TYPES, items, AUDIO: {tn01: true, tn02: true, tn03: true, tn04: true, tn05: true, tn06: true, tn07: true, tn08: true, tn09: true, tn10: true} };
+  return { TYPES, items, AUDIO: {tn01: true, tn02: true, tn03: true, tn04: true, tn05: true, tn06: true, tn07: true, tn08: true, tn09: true, tn10: true, tn11: true, tn12: true, tn13: true, tn14: true, tn15: true, tn16: true, tn17: true, tn18: true, tn19: true, tn20: true} };
 })();
