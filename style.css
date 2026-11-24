@@ -160,6 +160,13 @@ main { padding-block: 22px 40px; }
 .sticker { position: absolute; right: 8px; top: 8px; width: 40px; height: 40px; transform: rotate(10deg); filter: drop-shadow(0 2px 0 rgba(58, 59, 60, .25)); }
 .empty { padding: 30px; text-align: center; color: var(--muted); }
 
+/* ── học thử (khách chưa đăng nhập): nhãn trên thẻ câu và thẻ trò chơi ── */
+.nhan-thu, .nhan-khoa { display: inline-block; align-self: flex-start; border-radius: 999px; padding: 2px 10px; font-size: 0.82rem; font-weight: 800; line-height: 1.4; }
+.nhan-thu { background: var(--ttv-goc-dam); color: #fff; }
+.nhan-khoa { background: var(--ttv-vien); color: var(--ttv-chu); }
+.card .nhan-thu, .card .nhan-khoa { margin: 10px 14px 0; }
+.game-card .nhan-khoa { margin-top: 6px; }
+
 /* ── trang một câu ── */
 .detail { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 28px; align-items: start; margin-top: 14px; }
 @media (max-width: 860px) { .detail { grid-template-columns: 1fr; gap: 18px; } }

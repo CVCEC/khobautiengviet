@@ -18,6 +18,13 @@
   const cvars = (t) => `--c:var(--${CV[t]});--cbg:var(--${CV[t]}-bg);--cmid:var(--${CV[t]}-mid)`;
   const app = document.getElementById('app');
 
+  /* ── học thử (khách chưa đăng nhập): cổng báo chế độ học qua bộ mẫu; khách chỉ học câu "Ếch ngồi đáy giếng".
+        Câu khác và 7 trò chơi chung: bộ mẫu hiện màn mời đăng nhập (TTV.choPhepBai). Danh sách, Trang đầu, Sổ sưu tầm vẫn xem được. ── */
+  const BAI_THU = 'tn01';
+  const laThu = () => !!(window.TTV && TTV.cheDoHoc && TTV.cheDoHoc() === 'thu');
+  const choPhep = (maBai) => { try { return !(window.TTV && TTV.choPhepBai) || TTV.choPhepBai(maBai) !== false; } catch (e) { return true; } };
+  const nhanThu = (laBaiThu) => (laThu() ? (laBaiThu ? '<span class="nhan-thu">Học thử</span>' : '<span class="nhan-khoa">🔒 Đăng nhập để học</span>') : '');
+
   /* ── lưu tiến độ trên máy (mỗi bạn một trình duyệt) ── */
   const store = {
     get(k, d) { try { const v = localStorage.getItem('khobau:' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
@@ -126,7 +133,7 @@
   const enBtn = (id, label = 'EN') => `<button class="en-btn" data-act="en" data-target="${id}" aria-expanded="false" aria-controls="${id}" title="Giải thích bằng tiếng Anh">${label}</button>`;
   const meter = (got, total) => `<div class="meter"><div class="bar"><i style="width:${Math.round(got / total * 100)}%"></i></div><span>${got}/${total}</span></div>`;
   const cardHTML = (it) => `<a class="card" href="#cau-${it.id}" style="${cvars(it.type)}" data-text="${esc((it.text || it.lines.join(' ')).toLowerCase())}">
-      <div class="pic">${ART.scene(it.id)}</div><span class="num">${numIn(it)}</span>${S.stickers[it.id] ? I.sticker(it.type) : ''}
+      <div class="pic">${ART.scene(it.id)}</div><span class="num">${numIn(it)}</span>${S.stickers[it.id] ? I.sticker(it.type) : ''}${nhanThu(it.id === BAI_THU)}
       <div class="t">${esc(firstLine(it))}${it.lines ? `<small>${esc(it.lines[1])}${it.lines.length > 2 ? ' …' : ''}</small>` : ''}</div></a>`;
 
   /* ── TRANG ĐẦU ── */
@@ -155,7 +162,7 @@
         <a class="today" href="#cau-${today.id}" style="${cvars(today.type)}"><div class="pic">${ART.scene(today.id)}</div><div class="body"><span class="kind">${TYPES[today.type].name}</span><p class="say-text">${(today.text ? esc(today.text) : today.lines.map(esc).join('<br>'))}</p><p>${esc(today.nghia)}</p><span class="btn small" style="align-self:flex-start">Đọc tiếp</span></div></a></section>
       <section class="section"><div class="section-head"><h2>Bảy trò chơi</h2><p>Mỗi lượt chơi được tới 3 ngôi sao.</p></div><div class="games">${GAMES.map(gameCard).join('')}<a class="game-card" href="#so-suu-tam"><span class="gi" style="--gbg:var(--straw-l)">${I.star()}</span><span><h3>Sổ sưu tầm</h3><p>Xem các viên ngọc, ngôi sao và huy hiệu các bạn đã có.</p></span></a></div></section>`;
   }
-  const gameCard = (g) => `<a class="game-card" href="#choi-${g.id}"><span class="gi" style="--gbg:${g.bg}">${G_ICON[g.id]}</span><span><h3>${g.name}</h3><p>${g.desc}</p>${S.best[g.id] ? `<span class="best">${[1, 2, 3].map((k) => I.star(k <= S.best[g.id])).join('')}</span>` : ''}</span></a>`;
+  const gameCard = (g) => `<a class="game-card" href="#choi-${g.id}"><span class="gi" style="--gbg:${g.bg}">${G_ICON[g.id]}</span><span><h3>${g.name}</h3><p>${g.desc}</p>${nhanThu(false)}${S.best[g.id] ? `<span class="best">${[1, 2, 3].map((k) => I.star(k <= S.best[g.id])).join('')}</span>` : ''}</span></a>`;
 
   /* ── KHO ── */
   function viewLib(t) {
@@ -609,6 +616,8 @@
   /* ── điều hướng bằng #tên-trang ── */
   function render() {
     const r = decodeURIComponent(location.hash.slice(1));
+    if (r.startsWith('cau-') && byId[r.slice(4)] && !choPhep(r.slice(4))) return;
+    if (r.startsWith('choi-') && gdef(r.slice(5)) && !choPhep(r)) return;
     let html;
     if (!r || r === 'trang-dau') html = viewHome();
     else if (TK.includes(r)) html = viewLib(r);
@@ -641,4 +650,5 @@
     render(); if (r !== lastRoute) window.scrollTo(0, 0); lastRoute = r;
   });
   render(); lastRoute = location.hash.slice(1);
+  document.addEventListener('ttv-che-do', () => { if (!P) render(); });
 })();

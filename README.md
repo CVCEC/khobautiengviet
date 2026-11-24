@@ -33,6 +33,10 @@ Nút "Nghe đọc" đi qua bộ mẫu `TTV.phat({ tep, chu })` (quy tắc 7, t�
 2. Mở `data.js`, tìm dòng cuối `return { TYPES, items, AUDIO: {} };` và ghi các câu đã có file, ví dụ:
    `AUDIO: { tn01: true, cd05: true }`
 
+## Học thử (khách chưa đăng nhập)
+
+Cổng khai báo bài thử của góc trong `chung/gioi-thieu-goc.js` (kho cong-truong-tieng-viet): `baiThu: "tn01"`. Khách xem được Trang đầu, ba kho, danh sách trò chơi, Sổ sưu tầm và học trọn câu **Ếch ngồi đáy giếng** (cả 4 bài luyện). Mở câu khác hoặc một trong 7 trò chơi chung thì `app.js` gọi `TTV.choPhepBai(...)`, bộ mẫu hiện màn mời Đăng nhập / Đăng ký. Thẻ câu và thẻ trò chơi có nhãn "Học thử" hoặc "🔒 Đăng nhập để học".
+
 ## Tiến độ của học sinh
 
 Ghi kết quả lên cổng (từ 17-11-2026): làm xong mỗi bài luyện của một câu thì gọi `TTV.ghiKetQua` với `bai` = mã câu (`tn01`, `tg05`, `cd12`), `hoatDong` = `dien` | `xep` | `hieu` | `tranh`, `soTroChoi` = 4; chơi xong một trong 7 trò chung thì `bai` = `choi-<mã trò>`, `hoatDong` = mã trò, `soTroChoi` = 1. Không thêm khoá localStorage mới.
