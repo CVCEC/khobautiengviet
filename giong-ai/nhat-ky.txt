@@ -28,3 +28,10 @@
 0.86  Chuồn chuồn bay thấp thì mưa, bay cao thì nắng, bay vừa thì râm  |  chuồn chuồn bay thấp thì mưa, bay cao thì nắng, bay vùa thì dâm.
 1.00  Chó treo mèo đậy  |  Chó treo, mèo đậy
 1.00  Một điều nhịn, chín điều lành  |  Một điều nhịn, chín điều lành.
+Lô 9 câu – Gemini không trả tiếng: không có tiếng trả về: {"candidates": [{"finishReason": "SAFETY", "index": 0, "finishMessage": "The audio stream could not be completed. Please retry your reque
+Lô 9 câu – Gemini không trả tiếng: không có tiếng trả về: {"candidates": [{"finishReason": "SAFETY", "index": 0, "finishMessage": "The audio stream could not be completed. Please retry your reque
+Lô 4 câu – Gemini không trả tiếng: không có tiếng trả về: {"candidates": [{"finishReason": "SAFETY", "index": 0, "finishMessage": "The audio stream could not be completed. Please retry your reque
+1.00  Công cha như núi Thái Sơn, Nghĩa mẹ như nước trong nguồn chảy ra, Một lòng thờ mẹ kính cha, Cho tròn chữ hiếu mới là đạo con.  |  Công cha như núi thái sơn. Nghĩa mẹ như nước trong nguồn chảy ra. Một lòng thờ mẹ kính cha. Cho tròn chữ hiếu mới là đạo con.
+0.93  Bầu ơi thương lấy bí cùng, Tuy rằng khác giống nhưng chung một giàn.  |  Bầu ơi, thương lấy bí cùng. Tuy rằng khác giống, nhưng chung một dàn.
+0.93  Nhiễu điều phủ lấy giá gương, Người trong một nước phải thương nhau cùng.  |  Nhiễu điều phủ lấy giá hương. Người trong một nước phải thương nhau cùng.
+0.93  Một cây làm chẳng nên non, Ba cây chụm lại nên hòn núi cao.  |  Một cây làm chẳng nên non Ba cây trụ lại nên hòn núi cao
