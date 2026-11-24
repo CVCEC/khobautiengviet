@@ -51,3 +51,5 @@ Lô 7 câu: khoảng lặng chưa rõ, cắt theo mốc chữ của Whisper
 Lô 4 câu có 4 câu lệch nhiều – có thể cắt sai, chia đôi để đọc lại
 0.86  Con mèo mà trèo cây cau, Hỏi thăm chú chuột đi đâu vắng nhà, Chú chuột đi chợ đằng xa, Mua mắm mua muối giỗ cha con mèo.  |  Con mèo mà chèo cây cao Hỏi thăm chú chuột đi đâu vắng nhà Chú chuột đi chợ đằng xa Mua mắm mua muối, dỗ tra con mèo
 1.00  Chim khôn kêu tiếng rảnh rang, Người khôn nói tiếng dịu dàng dễ nghe.  |  Chim khôn kêu tiếng rảnh rang Người khôn nói tiếng dịu dàng dễ nghe
+0.50  Muốn sang thì bắc cầu kiều, Muốn con hay chữ thì yêu lấy thầy.  |  Muốn sang thì bắt cầu kiều
+0.00  Dù ai nói ngả nói nghiêng, Lòng ta vẫn vững như kiềng ba chân.  |  Muốn con hay chữ thì yêu lấy thầy
