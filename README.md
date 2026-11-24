@@ -33,6 +33,14 @@ Nút "Nghe đọc" đi qua bộ mẫu `TTV.phat({ tep, chu })` (quy tắc 7, t�
 2. Mở `data.js`, tìm dòng cuối `return { TYPES, items, AUDIO: {} };` và ghi các câu đã có file, ví dụ:
    `AUDIO: { tn01: true, cd05: true }`
 
+## Học thử (khách chưa đăng nhập)
+
+Góc học chỉ mở trong khung của cổng https://vietclass.cvcec.org (bộ mẫu chung lo phần này). Khách chưa đăng nhập được **học thử câu “Ếch ngồi đáy giếng”** (mã `tn01`, trang `#cau-tn01`): đọc, nghe đọc, 4 bài luyện tập và cất vào Sổ sưu tầm. Khách vẫn xem được trang đầu, ba kho (danh sách câu), danh sách trò chơi và Sổ sưu tầm.
+
+- Bài học thử của góc khai ở cổng, trong `chung/gioi-thieu-goc.js` (kho CVCEC/cong-truong-tieng-viet), mục `khobau.thu` (`baiThu: "tn01"`).
+- `app.js` gọi `TTV.choPhepBai(mã)` trước khi mở một câu (mã câu, ví dụ `tg04`) hoặc một trò chơi (mã `choi-…`). Trò chơi trộn nhiều câu nên khách mở trò chơi nào cũng được mời đăng nhập. Mã khác `tn01` thì bộ mẫu hiện màn “Bạn đã học thử xong một bài!” có nút Đăng nhập, Đăng ký.
+- Khi biết đang học thử (sự kiện `ttv-che-do`), thẻ câu tn01 ghi “Học thử”, các câu khác và các trò chơi ghi “Đăng nhập để học”; “Câu hay hôm nay” là câu tn01. Người đã đăng nhập không thấy gì khác.
+
 ## Tiến độ của học sinh
 
 Ghi kết quả lên cổng (từ 17-11-2026): làm xong mỗi bài luyện của một câu thì gọi `TTV.ghiKetQua` với `bai` = mã câu (`tn01`, `tg05`, `cd12`), `hoatDong` = `dien` | `xep` | `hieu` | `tranh`, `soTroChoi` = 4; chơi xong một trong 7 trò chung thì `bai` = `choi-<mã trò>`, `hoatDong` = mã trò, `soTroChoi` = 1. Không thêm khoá localStorage mới.

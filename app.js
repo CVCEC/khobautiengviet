@@ -122,17 +122,30 @@
     document.querySelectorAll('.nav a').forEach((a) => { if (a.dataset.r === key) { a.setAttribute('aria-current', 'page'); if (nav.scrollWidth > nav.clientWidth) nav.scrollLeft = a.offsetLeft - nav.offsetLeft - (nav.clientWidth - a.offsetWidth) / 2; } else a.removeAttribute('aria-current'); });
   }
 
+  /* ── học thử (khách chưa đăng nhập): cổng báo chế độ qua bộ mẫu chung; bài thử là câu "Ếch ngồi đáy giếng" (mã "tn01") ── */
+  const BAI_THU = 'tn01';
+  const laHocThu = () => !!(window.TTV && window.TTV.cheDoHoc && window.TTV.cheDoHoc() === 'thu');
+  // Mở một câu (#cau-…) hoặc một trò chơi (#choi-…): hỏi bộ mẫu trước. Trò chơi trộn nhiều câu nên dùng mã "choi-…",
+  // không bao giờ trùng bài thử: khách mở trò chơi là được mời đăng nhập. Trả false thì bộ mẫu đã hiện màn mời đăng nhập.
+  const choPhep = (r) => {
+    if (!(window.TTV && window.TTV.choPhepBai)) return true;
+    if (r.startsWith('cau-') && byId[r.slice(4)]) return window.TTV.choPhepBai(r.slice(4));
+    if (r.startsWith('choi-') && gdef(r.slice(5))) return window.TTV.choPhepBai(r);
+    return true;
+  };
+  const nhanThu = (laBaiThu) => (laHocThu() ? (laBaiThu ? '<span class="tag-thu thu">Học thử</span>' : '<span class="tag-thu khoa">Đăng nhập để học</span>') : '');
+
   /* ── phần dùng chung ── */
   const enBtn = (id, label = 'EN') => `<button class="en-btn" data-act="en" data-target="${id}" aria-expanded="false" aria-controls="${id}" title="Giải thích bằng tiếng Anh">${label}</button>`;
   const meter = (got, total) => `<div class="meter"><div class="bar"><i style="width:${Math.round(got / total * 100)}%"></i></div><span>${got}/${total}</span></div>`;
   const cardHTML = (it) => `<a class="card" href="#cau-${it.id}" style="${cvars(it.type)}" data-text="${esc((it.text || it.lines.join(' ')).toLowerCase())}">
       <div class="pic">${ART.scene(it.id)}</div><span class="num">${numIn(it)}</span>${S.stickers[it.id] ? I.sticker(it.type) : ''}
-      <div class="t">${esc(firstLine(it))}${it.lines ? `<small>${esc(it.lines[1])}${it.lines.length > 2 ? ' …' : ''}</small>` : ''}</div></a>`;
+      <div class="t">${esc(firstLine(it))}${it.lines ? `<small>${esc(it.lines[1])}${it.lines.length > 2 ? ' …' : ''}</small>` : ''}${nhanThu(it.id === BAI_THU)}</div></a>`;
 
   /* ── TRANG ĐẦU ── */
   function viewHome() {
     const day = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 864e5);
-    const today = ITEMS[(day * 7) % ITEMS.length];
+    const today = (laHocThu() && byId[BAI_THU]) || ITEMS[(day * 7) % ITEMS.length];
     const chest = (t, art) => { const T = TYPES[t]; return `<a class="chest" href="#${t}" style="${cvars(t)}"><div class="pic">${ART.scene(art)}</div><div class="body"><h3>${T.name}</h3><p class="tag">${T.short}</p><p class="def">${T.def}</p>${meter(nStick(t), ofType(t).length)}</div></a>`; };
     return `<section class="hero ttv-canh">
         <div><p class="eyebrow">Góc đọc hiểu · Trường Tiếng Việt Của Em</p>
@@ -155,7 +168,7 @@
         <a class="today" href="#cau-${today.id}" style="${cvars(today.type)}"><div class="pic">${ART.scene(today.id)}</div><div class="body"><span class="kind">${TYPES[today.type].name}</span><p class="say-text">${(today.text ? esc(today.text) : today.lines.map(esc).join('<br>'))}</p><p>${esc(today.nghia)}</p><span class="btn small" style="align-self:flex-start">Đọc tiếp</span></div></a></section>
       <section class="section"><div class="section-head"><h2>Bảy trò chơi</h2><p>Mỗi lượt chơi được tới 3 ngôi sao.</p></div><div class="games">${GAMES.map(gameCard).join('')}<a class="game-card" href="#so-suu-tam"><span class="gi" style="--gbg:var(--straw-l)">${I.star()}</span><span><h3>Sổ sưu tầm</h3><p>Xem các viên ngọc, ngôi sao và huy hiệu các bạn đã có.</p></span></a></div></section>`;
   }
-  const gameCard = (g) => `<a class="game-card" href="#choi-${g.id}"><span class="gi" style="--gbg:${g.bg}">${G_ICON[g.id]}</span><span><h3>${g.name}</h3><p>${g.desc}</p>${S.best[g.id] ? `<span class="best">${[1, 2, 3].map((k) => I.star(k <= S.best[g.id])).join('')}</span>` : ''}</span></a>`;
+  const gameCard = (g) => `<a class="game-card" href="#choi-${g.id}"><span class="gi" style="--gbg:${g.bg}">${G_ICON[g.id]}</span><span><h3>${g.name}</h3><p>${g.desc}</p>${nhanThu(false)}${S.best[g.id] ? `<span class="best">${[1, 2, 3].map((k) => I.star(k <= S.best[g.id])).join('')}</span>` : ''}</span></a>`;
 
   /* ── KHO ── */
   function viewLib(t) {
@@ -530,7 +543,7 @@
       P.say = rand(['Bài tiếp theo nè!', 'Các bạn đọc thật kỹ nhé!', 'Mình cùng làm bài này nhé!']); P.mood = rand(['reading', 'listening', 'wave']);
       drawPx(); const b = document.querySelector('.px-box'); if (b) b.scrollTop = 0;
     },
-    'play-kho'(el, e) { e.preventDefault(); G = null; newGame('dien-tu', el.dataset.kho); location.hash = 'choi-dien-tu'; },
+    'play-kho'(el, e) { e.preventDefault(); if (!choPhep('choi-dien-tu')) return; G = null; newGame('dien-tu', el.dataset.kho); location.hash = 'choi-dien-tu'; },
     kho(el) { newGame(G.id, el.dataset.kho); render(); },
     again() { newGame(G.id, G.kho); render(); },
     ans(el) {
@@ -609,6 +622,7 @@
   /* ── điều hướng bằng #tên-trang ── */
   function render() {
     const r = decodeURIComponent(location.hash.slice(1));
+    if (!choPhep(r)) return; // khách học thử mở câu khác / trò chơi: không vẽ
     let html;
     if (!r || r === 'trang-dau') html = viewHome();
     else if (TK.includes(r)) html = viewLib(r);
@@ -637,8 +651,15 @@
   window.addEventListener('hashchange', () => {
     const r = location.hash.slice(1);
     if (P) closePx();
+    if (!choPhep(decodeURIComponent(r))) return;
     if (r.startsWith('choi-') && (!G || G.id !== r.slice(5) || G.over)) { const k = G && G.kho; G = null; newGame(r.slice(5), k); }
     render(); if (r !== lastRoute) window.scrollTo(0, 0); lastRoute = r;
+  });
+  // Cổng trả lời chế độ học sau khi trang đã vẽ: kiểm tra lại câu / trò chơi đang mở, vẽ lại danh sách (nhãn học thử)
+  document.addEventListener('ttv-che-do', () => {
+    const r = decodeURIComponent(location.hash.slice(1));
+    if (r.startsWith('cau-') || r.startsWith('choi-')) choPhep(r);
+    else render();
   });
   render(); lastRoute = location.hash.slice(1);
 })();
