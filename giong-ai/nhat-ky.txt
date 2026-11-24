@@ -35,3 +35,8 @@ Lô 4 câu – Gemini không trả tiếng: không có tiếng trả về: {"can
 0.93  Bầu ơi thương lấy bí cùng, Tuy rằng khác giống nhưng chung một giàn.  |  Bầu ơi, thương lấy bí cùng. Tuy rằng khác giống, nhưng chung một dàn.
 0.93  Nhiễu điều phủ lấy giá gương, Người trong một nước phải thương nhau cùng.  |  Nhiễu điều phủ lấy giá hương. Người trong một nước phải thương nhau cùng.
 0.93  Một cây làm chẳng nên non, Ba cây chụm lại nên hòn núi cao.  |  Một cây làm chẳng nên non Ba cây trụ lại nên hòn núi cao
+1.00  Lời nói chẳng mất tiền mua, Lựa lời mà nói cho vừa lòng nhau.  |  Lời nói chẳng mất tiền mua Lựa lời mà nói cho vừa lòng nhau
+0.89  Cày đồng đang buổi ban trưa, Mồ hôi thánh thót như mưa ruộng cày, Ai ơi bưng bát cơm đầy, Dẻo thơm một hạt, đắng cay muôn phần.  |  Cầy đồng đang bủi ban trưa, mồ hôi thánh thót như mưa ruộng cầy. Ai ơi bưng bát cơm đầy, dẻo thơm một hạt, đắng cay muôn phần.
+0.93  Anh em như thể chân tay, Rách lành đùm bọc, dở hay đỡ đần.  |  Anh em như thể chân tay, sách lành đùm bọc, dở hay đỡ đần.
+1.00  Khôn ngoan đối đáp người ngoài, Gà cùng một mẹ chớ hoài đá nhau.  |  Khôn ngoan đối đáp người ngoài Gà cùng một mẹ Chớ hoài đá nhau
+1.00  Con người có tổ có tông, Như cây có cội, như sông có nguồn.  |  con người có tổ có tông, như cây có cội, như sông có nguồn.
