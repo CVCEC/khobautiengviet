@@ -8,3 +8,23 @@
 1.00  Học một biết mười  |  Học một, biết mười
 1.00  Một nắng hai sương  |  một nắng, hai sương
 1.00  Có một không hai  |  Có một không hai
+1.00  Uống nước nhớ nguồn  |  uống nước, nhớ nguồn
+0.67  Ăn quả nhớ kẻ trồng cây  |  Ăn quà nhớ kè trồng cây
+0.88  Có công mài sắt, có ngày nên kim  |  có công mài sách, có ngày nên kim
+1.00  Kiến tha lâu cũng đầy tổ  |  kiến tha lâu cũng đầy tổ.
+0.75  Nước chảy đá mòn  |  Nước chảy đá mon
+0.80  Lá lành đùm lá rách  |  Lá lành đùm lá sách
+0.00  Tre già măng mọc  |  CHE DÀ MẤNH MỚC
+0.75  Có chí thì nên  |  Có chỉ thì nên
+0.88  Đi một ngày đàng, học một sàng khôn  |  Đi một ngày đàn, học một sàng khôn
+0.83  Không thầy đố mày làm nên  |  Không thầy đổ mày làm nên
+1.00  Tốt gỗ hơn tốt nước sơn  |  tốt gỗ hơn tốt nước sơn
+0.88  Học ăn, học nói, học gói, học mở  |  học ăn, học nói, học gói, học mờ
+0.83  Lời chào cao hơn mâm cỗ  |  lời chào cao hơn mâm cổ
+1.00  Gần mực thì đen, gần đèn thì sáng  |  Gần mực thì đen, gần đèn thì sáng.
+1.00  Một con ngựa đau, cả tàu bỏ cỏ  |  Một con ngựa đau, cả tàu bỏ cỏ
+0.67  Thua keo này, bày keo khác  |  Thua kéo này, bày kéo khác
+0.88  Muốn biết phải hỏi, muốn giỏi phải học  |  muốn biết phải hỏi, muốn dòi phải học
+0.86  Chuồn chuồn bay thấp thì mưa, bay cao thì nắng, bay vừa thì râm  |  chuồn chuồn bay thấp thì mưa, bay cao thì nắng, bay vùa thì dâm.
+1.00  Chó treo mèo đậy  |  Chó treo, mèo đậy
+1.00  Một điều nhịn, chín điều lành  |  Một điều nhịn, chín điều lành.
