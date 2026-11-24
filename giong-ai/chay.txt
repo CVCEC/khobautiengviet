@@ -1,0 +1,7 @@
+# Cài đặt cho robot giọng đọc AI. Sửa và lưu tệp này thì robot chạy ngay một lần.
+# Mỗi dòng TÊN=giá trị. Dòng bắt đầu bằng # là ghi chú.
+TEN_GOC=Kho báu lời ông bà
+GIONG=Kore
+GIONG_VUNG=bac
+LO=20
+LO_CHU=700
