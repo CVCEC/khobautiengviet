@@ -40,3 +40,11 @@ Lô 4 câu – Gemini không trả tiếng: không có tiếng trả về: {"can
 0.93  Anh em như thể chân tay, Rách lành đùm bọc, dở hay đỡ đần.  |  Anh em như thể chân tay, sách lành đùm bọc, dở hay đỡ đần.
 1.00  Khôn ngoan đối đáp người ngoài, Gà cùng một mẹ chớ hoài đá nhau.  |  Khôn ngoan đối đáp người ngoài Gà cùng một mẹ Chớ hoài đá nhau
 1.00  Con người có tổ có tông, Như cây có cội, như sông có nguồn.  |  con người có tổ có tông, như cây có cội, như sông có nguồn.
+Lô 7 câu: khoảng lặng chưa rõ, cắt theo mốc chữ của Whisper
+0.79  Dù ai đi ngược về xuôi, Nhớ ngày giỗ Tổ mùng mười tháng ba.  |  Dù ai đi ngược về xui, nhớ ngày dỗ tổ mùng người tháng ba.
+0.93  Đường vô xứ Nghệ quanh quanh, Non xanh nước biếc như tranh họa đồ.  |  Đường vô sứ nghệ quanh quanh, non xanh nước biếc như tranh họa đồ
+0.96  Rủ nhau xem cảnh Kiếm Hồ, Xem cầu Thê Húc, xem chùa Ngọc Sơn, Đài Nghiên, Tháp Bút chưa mòn, Hỏi ai gây dựng nên non nước này?  |  rủ nhau xem cảnh kiếm hồ, xem cầu thê húc, xem chùa ngọc sơn, đài nghiên, tháp bút chưa mòn, hỏi ai gây dựng nền non nước này.
+0.93  Đồng Đăng có phố Kỳ Lừa, Có nàng Tô Thị, có chùa Tam Thanh.  |  Đồng Đăng có phố kỳ lừa, có nàng tu thị, có chùa tam thanh.
+0.68  Trâu ơi ta bảo trâu này, Trâu ra ngoài ruộng trâu cày với ta, Cấy cày vốn nghiệp nông gia, Ta đây trâu đấy ai mà quản công.  |  Châu ơi, ta bảo châu này, châu ra ngoài ruộng, châu cầy với ta, cấy cầy, phốn nghiệp, nông ra, ta đây châu đấy, ai mà quản công.
+0.86  Trong đầm gì đẹp bằng sen, Lá xanh bông trắng lại chen nhị vàng, Nhị vàng bông trắng lá xanh, Gần bùn mà chẳng hôi tanh mùi bùn.  |  Trong đầm dị đẹp bằng sen Lá xanh bông trắng lại trên nhị vàng Nhị vàng bông trắng lá xanh Gần bùng mà chẳng hôi tanh mùi bùng
+0.89  Ví dầu cầu ván đóng đinh, Cầu tre lắt lẻo gập ghềnh khó đi, Khó đi mẹ dắt con đi, Con đi trường học, mẹ đi trường đời.  |  Ví dầu cầu ván đóng đinh Cầu che lắt lẻo gập gình, khó đi Khó đi, mẹ rắt con đi Con đi trường học, mẹ đi trường đời
