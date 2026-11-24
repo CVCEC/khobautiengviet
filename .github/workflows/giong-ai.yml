@@ -1,0 +1,59 @@
+name: Giọng đọc AI
+
+# Robot giọng đọc AI cho góc Kho báu lời ông bà (tools/giong_ai.py, Google Gemini, giọng Kore miền Bắc – giống vuihoctiengviet và venhaem).
+# Danh sách câu: giong-ai/can-doc.tsv · kết quả: giong-ai/trang-thai.md · câu cần nghe kỹ: giong-ai/kiem-tra.tsv
+# Chạy khi giong-ai/chay.txt thay đổi, khi bấm tay (Actions → Giọng đọc AI → Run workflow),
+# và mỗi ngày lúc 08:12 UTC để làm tiếp phần còn lại (làm tiếp phần còn lại).
+# Cần secret GEMINI_API_KEY (secret của tổ chức CVCEC hoặc của kho: Settings → Secrets and variables → Actions).
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['giong-ai/chay.txt', 'giong-ai/bo.txt']
+  schedule:
+    - cron: '12 8 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: giong-ai-khobautiengviet
+  cancel-in-progress: false
+
+jobs:
+  doc:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - uses: actions/cache@v5
+        with:
+          path: ~/.cache/huggingface
+          key: whisper-medium
+      - run: pip install faster-whisper==1.1.1 requests
+      - name: Cài ffmpeg (cắt và nén tiếng)
+        timeout-minutes: 12
+        env:
+          DEBIAN_FRONTEND: noninteractive
+          NEEDRESTART_MODE: a
+        run: |
+          which ffmpeg && exit 0
+          for i in 1 2 3; do
+            timeout 240 sudo -E apt-get update -qq && timeout 300 sudo -E apt-get install -y -qq --no-install-recommends -o Dpkg::Options::=--force-confnew ffmpeg && exit 0
+            echo "apt chưa được, thử lại ($i)"; sleep 20
+          done
+          exit 1
+      - name: Cài đặt cho lần chạy (giong-ai/chay.txt)
+        run: grep -E '^[A-Z_]+=' giong-ai/chay.txt >> "$GITHUB_ENV" || true
+      - name: Đọc các câu còn thiếu tiếng
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          python tools/giong_ai.py
