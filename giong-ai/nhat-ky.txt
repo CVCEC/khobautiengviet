@@ -48,3 +48,6 @@ Lô 7 câu: khoảng lặng chưa rõ, cắt theo mốc chữ của Whisper
 0.68  Trâu ơi ta bảo trâu này, Trâu ra ngoài ruộng trâu cày với ta, Cấy cày vốn nghiệp nông gia, Ta đây trâu đấy ai mà quản công.  |  Châu ơi, ta bảo châu này, châu ra ngoài ruộng, châu cầy với ta, cấy cầy, phốn nghiệp, nông ra, ta đây châu đấy, ai mà quản công.
 0.86  Trong đầm gì đẹp bằng sen, Lá xanh bông trắng lại chen nhị vàng, Nhị vàng bông trắng lá xanh, Gần bùn mà chẳng hôi tanh mùi bùn.  |  Trong đầm dị đẹp bằng sen Lá xanh bông trắng lại trên nhị vàng Nhị vàng bông trắng lá xanh Gần bùng mà chẳng hôi tanh mùi bùng
 0.89  Ví dầu cầu ván đóng đinh, Cầu tre lắt lẻo gập ghềnh khó đi, Khó đi mẹ dắt con đi, Con đi trường học, mẹ đi trường đời.  |  Ví dầu cầu ván đóng đinh Cầu che lắt lẻo gập gình, khó đi Khó đi, mẹ rắt con đi Con đi trường học, mẹ đi trường đời
+Lô 4 câu có 4 câu lệch nhiều – có thể cắt sai, chia đôi để đọc lại
+0.86  Con mèo mà trèo cây cau, Hỏi thăm chú chuột đi đâu vắng nhà, Chú chuột đi chợ đằng xa, Mua mắm mua muối giỗ cha con mèo.  |  Con mèo mà chèo cây cao Hỏi thăm chú chuột đi đâu vắng nhà Chú chuột đi chợ đằng xa Mua mắm mua muối, dỗ tra con mèo
+1.00  Chim khôn kêu tiếng rảnh rang, Người khôn nói tiếng dịu dàng dễ nghe.  |  Chim khôn kêu tiếng rảnh rang Người khôn nói tiếng dịu dàng dễ nghe
