@@ -25,13 +25,14 @@ Mini-website thành ngữ, tục ngữ, ca dao của **Trường Tiếng Việt 
 - `robots.txt` và thẻ `noimageindex` yêu cầu Google không đưa ảnh lên kết quả tìm kiếm; chặn các công cụ AI thu thập dữ liệu.
 - Chân trang có mục "Lưu ý về sử dụng tài liệu · Terms of use" (song ngữ).
 
-## Thêm giọng đọc thật (giọng Elio) sau này
+## Giọng đọc (giọng AI Kore của trường, hoặc bản thu giọng người thật)
 
-Nút "Nghe đọc" đi qua bộ mẫu `TTV.phat({ tep, chu })` (quy tắc 7, từ 17-11-2026): câu đã có tệp ghi âm giọng chuẩn của trường thì phát tệp; câu chưa có tệp thì bộ mẫu tạm đọc bằng giọng máy. Trang không gọi speechSynthesis trực tiếp. Khi có file ghi âm:
+Nút "Nghe đọc" đi qua bộ mẫu `TTV.phat({ tep, chu })` (quy tắc 7, từ 17-11-2026): câu đã có tệp `audio/<mã>.mp3` thì phát tệp; câu chưa có tệp thì bộ mẫu tạm đọc bằng giọng máy. Trang không gọi speechSynthesis trực tiếp.
 
-1. Đặt file vào thư mục `audio/`, đặt tên theo mã câu, ví dụ `audio/tn01.mp3`, `audio/cd05.mp3`.
-2. Mở `data.js`, tìm dòng cuối `return { TYPES, items, AUDIO: {} };` và ghi các câu đã có file, ví dụ:
-   `AUDIO: { tn01: true, cd05: true }`
+- Giọng chuẩn của Trâu Con là giọng AI **Kore** (Google Gemini, miền Bắc), do robot `giong-ai/` tạo (xem `giong-ai/README.md`). Từ 25-11-2026 mọi góc dùng chung giọng này.
+- Robot tự ghi các câu đã có tệp vào dòng `AUDIO: {…}` cuối `data.js` (`tools/gan_giong.py`), không cần sửa tay.
+- Thay bằng bản thu giọng người thật: đặt tệp `audio/<mã>.mp3` (ví dụ `audio/tn01.mp3`) đè lên tệp cũ. Robot không ghi đè tệp đã có.
+- Một câu đọc sai: xoá `audio/<mã>.mp3`, lần chạy sau robot đọc lại. (25-11-2026: đã xoá `cd19`, `cd20` vì bị cắt lệch.)
 
 ## Học thử (khách chưa đăng nhập)
 

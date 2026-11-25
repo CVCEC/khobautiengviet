@@ -442,6 +442,13 @@ def main():
                 if len(nhom) > 1:
                     h = len(nhom) // 2; hang[:0] = [nhom[:h], nhom[h:]]
                 continue
+            # Cắt lệch: tiếng của một câu giống câu ngay bên cạnh hơn câu của chính nó → bỏ cả lô, chia đôi để đọc lại
+            lech = [r['chu'] for i, (r, _o, nd, d) in enumerate(kq) if d < 0.5 and len(chuan(r['chu'])) >= 3 and any(
+                giong_nhau(doc_cho_may(kq[j][0]['chu']), nd) >= max(0.6, d + 0.25) for j in (i - 1, i + 1) if 0 <= j < len(kq))]
+            if lech and len(nhom) > 1:
+                ghi(f'Lô {len(nhom)} câu bị cắt lệch (ví dụ: {lech[0][:40]}) – chia đôi để đọc lại')
+                h = len(nhom) // 2; hang[:0] = [nhom[:h], nhom[h:]]
+                continue
             kem = sum(1 for x in kq if x[3] < 0.5)
             if len(nhom) > 1 and kem > max(2, len(nhom) * 0.3):
                 ghi(f'Lô {len(nhom)} câu có {kem} câu lệch nhiều – có thể cắt sai, chia đôi để đọc lại')
