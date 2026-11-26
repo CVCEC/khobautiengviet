@@ -95,6 +95,10 @@
   }
   /* ── ghi kết quả học lên cổng (bộ mẫu lo việc gửi; không tạo khoá localStorage mới) ── */
   const ghiKQ = (kq) => { try { if (window.TTV && TTV.ghiKetQua) TTV.ghiKetQua(kq); } catch (e) { /* bỏ qua */ } };
+  /* ── kết quả từng câu (hợp đồng 26-11-2026): tu = chữ ĐÍCH trong dữ liệu, không bao giờ là chữ người học gõ ── */
+  const tuDich = (s) => { s = String(s || '').normalize('NFC'); return s.length <= 30 ? s : ''; };
+  const loaiLoi = (a, b, macDinh) => { let l = null; try { const T = window.TTV; l = T && T.loaiLoi ? T.loaiLoi(a, b) : null; } catch (e) { l = null; } return l || macDinh; };
+  const mot = (ma, tu, dung, mang, loi) => { const c = { ma, tu: tuDich(tu), dung: !!dung, mang }; if (!dung && loi) c.loi = loi; return c; };
   const giay = (t0) => Math.round((Date.now() - (t0 || Date.now())) / 1000);
   const saoTheoTiLe = (d, m) => { const r = m ? d / m : 0; return r >= 0.9 ? 3 : r >= 0.6 ? 2 : r > 0 ? 1 : 0; };
   const HD_LUYEN = { dien: 'dien', xep: 'xep', nghia: 'hieu', tranh: 'tranh' };
@@ -241,7 +245,7 @@
     const it = byId[id], ans = bare(tokAt(it, it.blank.at)), target = orderSource(it).split(' ').map(bare);
     let tiles; do { tiles = shuffle(target.map((t) => ({ t }))); } while (tiles.length > 1 && tiles.every((x, k) => x.t === target[k]));
     P = {
-      id, step: 0, score: 0, first: true, solved: false, wrong: new Set(), done: false, stars: 0, t0: Date.now(),
+      id, step: 0, score: 0, first: true, solved: false, wrong: new Set(), loi: null, done: false, stars: 0, t0: Date.now(),
       dien: { ans, opts: shuffle([ans, ...it.blank.opts]) },
       xep: { target, tiles, ans: [], part: it.lines ? 'Dòng đầu của bài ca dao' : orderSource(it) !== it.text ? 'Nửa đầu của câu' : '' },
       nghia: shuffle([it, ...distract(it, 2)]).map((o) => ({ id: o.id, t: shortMeaning(o) })),
@@ -300,9 +304,16 @@
     if (ok) {
       P.solved = true; if (P.first) P.score++;
       const d = P.first ? 1 : 0;
-      ghiKQ({ bai: P.id, hoatDong: HD_LUYEN[P_STEPS[P.step].key], soTroChoi: 4, diem: d, diemToiDa: 1, sao: saoTheoTiLe(d, 1), thoiGianGiay: giay(P.t0) });
+      ghiKQ({ bai: P.id, hoatDong: HD_LUYEN[P_STEPS[P.step].key], soTroChoi: 4, diem: d, diemToiDa: 1, sao: saoTheoTiLe(d, 1), thoiGianGiay: giay(P.t0), cau: [pCau()] });
       P.say = rand(SAY.ok); P.mood = rand(['cheer', 'thumbs-up']); sfx.ok(); drawPx(); }
     else { P.first = false; P.say = rand(SAY.bad); P.mood = 'thinking'; sfx.bad(); drawPx(shakeSel); }
+  }
+  /* một câu cho bước luyện đang làm: Điền từ → viet; Xếp câu → ngu-phap (trat-tu); Hiểu nghĩa, Chọn tranh → van-hoa (nghia) */
+  function pCau() {
+    const it = byId[P.id], key = P_STEPS[P.step].key, ma = P.id + '-' + key;
+    if (key === 'dien') return mot(ma, P.dien.ans, P.first, 'viet', P.loi || 'nghia');
+    if (key === 'xep') return mot(ma, P.xep.target.join(' '), P.first, 'ngu-phap', 'trat-tu');
+    return mot(ma, firstLine(it), P.first, 'van-hoa', 'nghia');
   }
   function pFinish() {
     P.done = true; P.stars = P.score === 4 ? 3 : P.score === 3 ? 2 : 1;
@@ -482,13 +493,33 @@
       <p>${G.id === 'lat-the' ? `Các bạn ghép xong ${G.n} cặp sau ${G.moves} lần lật.` : `Đúng ngay lần đầu: ${G.score}/${G.scoreMax || G.n}`}</p>
       <div class="row"><button class="btn primary" data-act="again">Chơi lại</button><a class="btn" href="#tro-choi">Chọn trò khác</a><a class="btn" href="#so-suu-tam">Sổ sưu tầm</a></div></div>`;
   }
+  /* kết quả từng câu của một lượt chơi (Lật thẻ là trò trí nhớ nên không gửi `cau`) */
+  const G_CAU = {
+    'dien-tu': (q, r) => mot(q.it.id, bare(tokAt(q.it, q.it.blank.at)), r.dung, 'viet', r.loi || 'nghia'),
+    'xep-chu': (q, r) => mot(q.it.id, q.target.join(' '), r.dung, 'ngu-phap', 'trat-tu'),
+    'noi-cau': (it) => mot(it.id, firstLine(it), !G.missed.has(it.id), 'van-hoa', 'khac'),
+    'tham-tu': (q, r) => mot(q.it.id, firstLine(q.it), r.dung, 'van-hoa', 'nghia'),
+    'phan-loai': (q, r) => mot(q.it.id, firstLine(q.it), r.dung, 'van-hoa', 'khac'),
+    'tim-van': (q, r) => mot(q.it.id, bare(tokAt(q.it, q.it.rhyme.hide)), r.dung, 'am-chu', 'am-van')
+  };
+  function cauCuaLuot() {
+    const f = G_CAU[G.id]; if (!f) return null;
+    try {
+      const ds = G.id === 'noi-cau' ? G.rounds.flat().map((it) => f(it)) : G.q.map((q, k) => (G.kq && G.kq[k] ? f(q, G.kq[k]) : null)).filter(Boolean);
+      return ds.slice(0, 40);
+    } catch (e) { return null; }
+  }
+  /* ghi lại câu G.i lúc giải xong: đúng ngay lần đầu hay không, và loại lỗi của lần sai đầu tiên */
+  function ghiCau(loi) { if (!G.kq) G.kq = []; if (!G.kq[G.i]) G.kq[G.i] = { dung: G.first, loi: G.loiDau || loi || null }; }
   function finish() {
     let ratio;
     if (G.id === 'lat-the') { G.stars = G.moves <= 10 ? 3 : G.moves <= 16 ? 2 : 1; }
     else { G.scoreMax = G.id === 'noi-cau' ? G.rounds.reduce((a, r) => a + r.length, 0) : G.n; ratio = G.score / G.scoreMax; G.stars = ratio >= 0.85 ? 3 : ratio >= 0.55 ? 2 : 1; }
     G.over = true; S.stars += G.stars; S.played += 1; S.best[G.id] = Math.max(S.best[G.id] || 0, G.stars); save();
     const toiDa = G.id === 'lat-the' ? G.n : G.scoreMax;
-    ghiKQ({ bai: 'choi-' + G.id, hoatDong: G.id, soTroChoi: 1, diem: Math.min(G.score, toiDa), diemToiDa: toiDa, sao: G.stars, thoiGianGiay: giay(G.t0) });
+    const kq = { bai: 'choi-' + G.id, hoatDong: G.id, soTroChoi: 1, diem: Math.min(G.score, toiDa), diemToiDa: toiDa, sao: G.stars, thoiGianGiay: giay(G.t0) };
+    const cau = cauCuaLuot(); if (cau && cau.length) kq.cau = cau;
+    ghiKQ(kq);
     sfx.win(); confetti(G.stars * 18);
     render();
   }
@@ -515,7 +546,7 @@
     'p-ans'(el) {
       if (!P || P.solved) return; const v = el.dataset.v, key = P_STEPS[P.step].key;
       const ok = key === 'dien' ? v === P.dien.ans : v === P.id;
-      if (!ok) P.wrong.add(v);
+      if (!ok) { P.wrong.add(v); if (P.first && key === 'dien') P.loi = loaiLoi(P.dien.ans, v, 'nghia'); }
       pSolve(ok, `[data-v="${CSS.escape(v)}"]`);
     },
     'p-tile'(el) {
@@ -539,7 +570,7 @@
     },
     'p-next'() {
       if (P.step >= 3) return pFinish();
-      P.step++; P.solved = false; P.first = true; P.wrong = new Set(); P.t0 = Date.now();
+      P.step++; P.solved = false; P.first = true; P.wrong = new Set(); P.loi = null; P.t0 = Date.now();
       P.say = rand(['Bài tiếp theo nè!', 'Các bạn đọc thật kỹ nhé!', 'Mình cùng làm bài này nhé!']); P.mood = rand(['reading', 'listening', 'wave']);
       drawPx(); const b = document.querySelector('.px-box'); if (b) b.scrollTop = 0;
     },
@@ -548,12 +579,14 @@
     again() { newGame(G.id, G.kho); render(); },
     ans(el) {
       if (G.solved) return; const v = el.dataset.v; const ok = ENG[G.id].answer(G, v);
-      if (ok) { G.solved = true; if (G.first) G.score++; feedback(true); rerenderStage(); }
-      else { G.first = false; G.wrong.add(v); feedback(false); rerenderStage(`[data-v="${CSS.escape(v)}"]`); }
+      if (ok) { G.solved = true; if (G.first) G.score++; ghiCau(); feedback(true); rerenderStage(); }
+      else {
+        if (G.first && G.id === 'dien-tu') { const it = G.q[G.i].it; G.loiDau = loaiLoi(bare(tokAt(it, it.blank.at)), v, 'nghia'); }
+        G.first = false; G.wrong.add(v); feedback(false); rerenderStage(`[data-v="${CSS.escape(v)}"]`); }
     },
     next() {
       if (G.id === 'noi-cau') { G.i++; if (G.i >= G.n) return finish(); ENG['noi-cau'].round(G); G.say = 'Lượt mới rồi! Các bạn nối tiếp nhé!'; G.mood = 'reading'; return render(); }
-      G.i++; G.solved = false; G.wrong = new Set(); G.first = true;
+      G.i++; G.solved = false; G.wrong = new Set(); G.first = true; G.loiDau = null;
       if (G.i >= G.n) return finish();
       G.say = rand(['Câu tiếp theo nè!', 'Các bạn đọc thật kỹ nhé!', 'Mình cùng thử câu này nhé!']); G.mood = rand(['reading', 'listening', 'wave']);
       render(); document.getElementById('stage').scrollIntoView({ block: 'nearest', behavior: 'smooth' });
@@ -562,7 +595,7 @@
       const q = G.q[G.i], k = +el.dataset.k; if (q.ans.includes(k)) return; q.ans.push(k); sfx.pop();
       if (q.ans.length === q.target.length) {
         const ok = q.ans.every((kk, p) => q.tiles[kk].t === q.target[p]);
-        if (ok) { G.solved = true; if (G.first) G.score++; feedback(true); }
+        if (ok) { G.solved = true; if (G.first) G.score++; ghiCau(); feedback(true); }
         else { G.first = false; feedback(false); G.say = 'Thứ tự chưa đúng. Các bạn bấm vào tiếng ở hàng trên để gỡ ra và xếp lại nhé!'; }
         return rerenderStage(ok ? null : '#ansrow');
       }
@@ -575,7 +608,7 @@
       q.ans.splice(p);
       const k = q.tiles.findIndex((x, kk) => x.t === q.target[p] && !q.ans.includes(kk)); if (k >= 0) q.ans.push(k);
       G.say = 'Mình gợi ý một tiếng rồi đó. Các bạn xếp tiếp nhé!'; G.mood = 'thumbs-up';
-      if (q.ans.length === q.target.length) { G.solved = true; feedback(true); }
+      if (q.ans.length === q.target.length) { G.solved = true; ghiCau(); feedback(true); }
       rerenderStage();
     },
     L(el) { G.sel = el.dataset.id; G.bad = null; sfx.flip(); rerenderStage(); },

@@ -46,6 +46,23 @@ Góc học chỉ mở trong khung của cổng https://vietclass.cvcec.org (bộ
 
 Ghi kết quả lên cổng (từ 17-11-2026): làm xong mỗi bài luyện của một câu thì gọi `TTV.ghiKetQua` với `bai` = mã câu (`tn01`, `tg05`, `cd12`), `hoatDong` = `dien` | `xep` | `hieu` | `tranh`, `soTroChoi` = 4; chơi xong một trong 7 trò chung thì `bai` = `choi-<mã trò>`, `hoatDong` = mã trò, `soTroChoi` = 1. Không thêm khoá localStorage mới.
 
+### Kết quả từng câu (từ 26-11-2026)
+
+Cùng lần gọi `TTV.ghiKetQua` có thêm `cau: [{ ma, tu, dung, mang, loi }]` (tối đa 40 câu). `dung` = đúng ngay lần đầu (bấm sai hoặc dùng "Gợi ý một tiếng" là chưa đúng). `tu` luôn là chữ đích lấy từ `data.js` (tối đa 30 ký tự, dài hơn thì để trống, chỉ dùng `ma`), không bao giờ là chữ người học chọn.
+
+| Trò | `ma` | `tu` | `mang` | `loi` khi sai |
+|---|---|---|---|---|
+| Điền từ | mã câu (`tn01`…) | tiếng cần điền | `viet` | `TTV.loaiLoi` (vd. `dau-thanh`), không đoán được thì `nghia` |
+| Xếp chữ | mã câu | câu / dòng đầu cần xếp | `ngu-phap` | `trat-tu` |
+| Nối câu | mã câu | câu (dòng đầu) | `van-hoa` | `khac` |
+| Thám tử tình huống | mã câu | câu đúng | `van-hoa` | `nghia` |
+| Phân loại | mã câu | câu | `van-hoa` | `khac` |
+| Tìm vần | mã câu | tiếng cần tìm | `am-chu` | `am-van` |
+| Lật thẻ | — (trò trí nhớ, không gửi `cau`) | | | |
+| Luyện tập 4 bước của một câu | `tn01-dien`, `-xep`, `-nghia`, `-tranh` | như trên | `viet` / `ngu-phap` / `van-hoa` / `van-hoa` | như trên; Hiểu nghĩa, Chọn tranh: `nghia` |
+
+Bộ mẫu cũ không có `TTV.loaiLoi` thì dùng mã mặc định ở bảng; bộ mẫu cũ bỏ qua `cau`. Đã thử bằng Playwright (giả lập `TTV.ghiKetQua`): số câu `dung` khớp `diem` ở mọi trò.
+
 Câu đã sưu tầm và ngôi sao được lưu trên trình duyệt của từng máy (không cần đăng nhập).
 Đổi máy hoặc xóa dữ liệu trình duyệt thì bắt đầu lại.
 
